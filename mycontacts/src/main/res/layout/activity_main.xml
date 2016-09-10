@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/ll_context"
+    tools:context="com.example.hk.mycontacts.MainActivity">
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/tv_main_title"
+            android:background="#0AA7F0"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:id="@+id/tv_main_title" />
+
+
+
+
+        <ListView
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:id="@+id/lv_main" />
+
+
+
+
+
+
+</LinearLayout>

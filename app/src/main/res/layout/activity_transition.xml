@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="feicui.com.transition.Transition">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="addButton"
+            android:text="Add View"
+            android:textAllCaps="false" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="removeButton"
+            android:text="Remove View"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/ll_tran_container"
+            android:animateLayoutChanges="true">
+        </LinearLayout>
+        <!--android:layoutAnimation="@anim/transition_item"-->
+        <ListView
+            android:id="@+id/lv_transition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+
+
+
+</LinearLayout>

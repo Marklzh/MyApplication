@@ -1,0 +1,4630 @@
+Index: app/src/main/java/feicui/com/hk/BaseActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/BaseActivity.java	(revision )
++++ app/src/main/java/feicui/com/hk/BaseActivity.java	(revision )
+@@ -0,0 +1,43 @@
++package feicui.com.hk;
++
++import android.app.Activity;
++import android.os.Bundle;
++import android.view.Window;
++
++/**
++ * @author Neal
++ * @description Acitivy的基类
++ */
++public abstract class BaseActivity extends Activity {
++
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        //设置无标题
++        requestWindowFeature(Window.FEATURE_NO_TITLE);
++//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
++//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
++        //初始化Activity
++        setContentView(setContent());
++        initView();
++        setListener();
++    }
++
++    /**
++     * @description 设置当前页的布局文件
++     */
++    protected abstract int setContent();
++
++    /**
++     * @description 加载控件
++     */
++    protected abstract void initView();
++
++    /**
++     * @description 设置监听
++     */
++    protected abstract void setListener();
++
++
++}
+Index: gradle.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>GBK
+===================================================================
+--- gradle.properties	(revision )
++++ gradle.properties	(revision )
+@@ -0,0 +1,18 @@
++# Project-wide Gradle settings.
++
++# IDE (e.g. Android Studio) users:
++# Gradle settings configured through the IDE *will override*
++# any settings specified in this file.
++
++# For more details on how to configure your build environment visit
++# http://www.gradle.org/docs/current/userguide/build_environment.html
++
++# Specifies the JVM arguments used for the daemon process.
++# The setting is particularly useful for tweaking memory settings.
++# Default value: -Xmx10248m -XX:MaxPermSize=256m
++# org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
++
++# When configured, Gradle will run in incubating parallel mode.
++# This option should only be used with decoupled projects. More details, visit
++# http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects
++# org.gradle.parallel=true
+\ No newline at end of file
+Index: app/src/main/java/feicui/com/transition/TransitionAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/transition/TransitionAdapter.java	(revision )
++++ app/src/main/java/feicui/com/transition/TransitionAdapter.java	(revision )
+@@ -0,0 +1,54 @@
++package feicui.com.transition;
++
++import android.content.Context;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.BaseAdapter;
++
++import feicui.com.app.R;
++
++
++/**
++ * 2016/8/31.
++ *
++ * @description 展示ListView item过渡动画的适配器
++ */
++
++public class TransitionAdapter extends BaseAdapter {
++    //上下文对象
++    Context mContext;
++
++    /**
++     * @param context 上下文
++     * @description 本适配器构造
++     */
++    public TransitionAdapter(Context context) {
++        mContext = context;
++    }
++
++    //注意，此处数据不能过多，如超出屏幕范围产生滚动效果的话，动画可能会失效
++    @Override
++    public int getCount() {
++        return 8;
++    }
++
++    @Override
++    public Object getItem(int position) {
++        return null;
++    }
++
++    @Override
++    public long getItemId(int position) {
++        return position;
++    }
++
++    //此处为了简便未做优化
++    @Override
++    public View getView(int position, View convertView, ViewGroup parent) {
++        //加载子item的布局并返回
++        LayoutInflater inflater = LayoutInflater.from(mContext);
++        convertView = inflater.inflate(R.layout.item_transition, null);
++        return convertView;
++    }
++}
+Index: app/src/main/res/layout/activity_transition.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_transition.xml	(revision )
++++ app/src/main/res/layout/activity_transition.xml	(revision )
+@@ -0,0 +1,43 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    tools:context="feicui.com.transition.Transition">
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content">
++        <Button
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:onClick="addButton"
++            android:text="Add View"
++            android:textAllCaps="false" />
++        <Button
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:onClick="removeButton"
++            android:text="Remove View"
++            android:textAllCaps="false" />
++    </LinearLayout>
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            android:id="@+id/ll_tran_container"
++            android:animateLayoutChanges="true">
++        </LinearLayout>
++        <!--android:layoutAnimation="@anim/transition_item"-->
++        <ListView
++            android:id="@+id/lv_transition"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content">
++
++        </ListView>
++
++
++
++</LinearLayout>
+Index: gradlew.bat
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gradlew.bat	(revision )
++++ gradlew.bat	(revision )
+@@ -0,0 +1,90 @@
++@if "%DEBUG%" == "" @echo off
++@rem ##########################################################################
++@rem
++@rem  Gradle startup script for Windows
++@rem
++@rem ##########################################################################
++
++@rem Set local scope for the variables with windows NT shell
++if "%OS%"=="Windows_NT" setlocal
++
++@rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
++set DEFAULT_JVM_OPTS=
++
++set DIRNAME=%~dp0
++if "%DIRNAME%" == "" set DIRNAME=.
++set APP_BASE_NAME=%~n0
++set APP_HOME=%DIRNAME%
++
++@rem Find java.exe
++if defined JAVA_HOME goto findJavaFromJavaHome
++
++set JAVA_EXE=java.exe
++%JAVA_EXE% -version >NUL 2>&1
++if "%ERRORLEVEL%" == "0" goto init
++
++echo.
++echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
++echo.
++echo Please set the JAVA_HOME variable in your environment to match the
++echo location of your Java installation.
++
++goto fail
++
++:findJavaFromJavaHome
++set JAVA_HOME=%JAVA_HOME:"=%
++set JAVA_EXE=%JAVA_HOME%/bin/java.exe
++
++if exist "%JAVA_EXE%" goto init
++
++echo.
++echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
++echo.
++echo Please set the JAVA_HOME variable in your environment to match the
++echo location of your Java installation.
++
++goto fail
++
++:init
++@rem Get command-line arguments, handling Windowz variants
++
++if not "%OS%" == "Windows_NT" goto win9xME_args
++if "%@eval[2+2]" == "4" goto 4NT_args
++
++:win9xME_args
++@rem Slurp the command line arguments.
++set CMD_LINE_ARGS=
++set _SKIP=2
++
++:win9xME_args_slurp
++if "x%~1" == "x" goto execute
++
++set CMD_LINE_ARGS=%*
++goto execute
++
++:4NT_args
++@rem Get arguments from the 4NT Shell from JP Software
++set CMD_LINE_ARGS=%$
++
++:execute
++@rem Setup the command line
++
++set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
++
++@rem Execute Gradle
++"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %CMD_LINE_ARGS%
++
++:end
++@rem End local scope for the variables with windows NT shell
++if "%ERRORLEVEL%"=="0" goto mainEnd
++
++:fail
++rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
++rem the _cmd.exe /c_ return code!
++if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
++exit /b 1
++
++:mainEnd
++if "%OS%"=="Windows_NT" endlocal
++
++:omega
+Index: app/src/main/res/anim/viewanim.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/anim/viewanim.xml	(revision )
++++ app/src/main/res/anim/viewanim.xml	(revision )
+@@ -0,0 +1,33 @@
++<?xml version="1.0" encoding="utf-8"?>
++<set xmlns:android="http://schemas.android.com/apk/res/android"
++    android:interpolator="@android:anim/accelerate_interpolator">
++
++    <rotate
++        android:duration="1000"
++        android:fromDegrees="0"
++        android:pivotX="50%"
++        android:pivotY="50%"
++        android:toDegrees="360" />
++    <translate
++        android:duration="1000"
++        android:fromXDelta="0"
++        android:fromYDelta="0"
++        android:startOffset="1000"
++        android:toXDelta="400"
++        android:toYDelta="400" />
++
++    <alpha
++        android:duration="1000"
++        android:fromAlpha="1.0"
++        android:startOffset="1000"
++        android:toAlpha="0.0" />
++
++    <scale
++        android:duration="1000"
++        android:fromXScale="1.0"
++        android:fromYScale="1.0"
++        android:startOffset="1000"
++        android:toXScale="3.0"
++        android:toYScale="3.0" />
++
++</set>
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision )
++++ app/build.gradle	(revision )
+@@ -0,0 +1,26 @@
++apply plugin: 'com.android.application'
++
++android {
++    compileSdkVersion 24
++    buildToolsVersion "24.0.1"
++
++    defaultConfig {
++        applicationId "feicui.com.app"
++        minSdkVersion 19
++        targetSdkVersion 24
++        versionCode 1
++        versionName "1.0"
++    }
++    buildTypes {
++        release {
++            minifyEnabled false
++            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
++        }
++    }
++}
++
++dependencies {
++    compile fileTree(dir: 'libs', include: ['*.jar'])
++    testCompile 'junit:junit:4.12'
++    compile 'com.android.support:appcompat-v7:24.2.0'
++}
+Index: app/src/main/res/values-w820dp/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values-w820dp/dimens.xml	(revision )
++++ app/src/main/res/values-w820dp/dimens.xml	(revision )
+@@ -0,0 +1,6 @@
++<resources>
++    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
++         (such as screen margins) for screens with more than 820dp of available width. This
++         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
++    <dimen name="activity_horizontal_margin">64dp</dimen>
++</resources>
+Index: app/src/androidTest/java/feicui/com/app/ApplicationTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/androidTest/java/feicui/com/app/ApplicationTest.java	(revision )
++++ app/src/androidTest/java/feicui/com/app/ApplicationTest.java	(revision )
+@@ -0,0 +1,13 @@
++package feicui.com.app;
++
++import android.app.Application;
++import android.test.ApplicationTestCase;
++
++/**
++ * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
++ */
++public class ApplicationTest extends ApplicationTestCase<Application> {
++    public ApplicationTest() {
++        super(Application.class);
++    }
++}
+\ No newline at end of file
+Index: mycontacts/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/AndroidManifest.xml	(revision )
++++ mycontacts/src/main/AndroidManifest.xml	(revision )
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.example.hk.mycontacts">
++
++    <application
++        android:allowBackup="true"
++        android:icon="@mipmap/ic_launcher"
++        android:label="@string/app_name"
++        android:supportsRtl="true"
++        android:theme="@style/AppTheme">
++        <activity android:name=".WelcomeActivity">
++            <intent-filter>
++                <action android:name="android.intent.action.MAIN" />
++
++                <category android:name="android.intent.category.LAUNCHER" />
++            </intent-filter>
++        </activity>
++        <activity android:name=".MainActivity" />
++        <activity android:name="com.example.hk.transition.Transition"></activity>
++    </application>
++
++</manifest>
+\ No newline at end of file
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision )
++++ build.gradle	(revision )
+@@ -0,0 +1,23 @@
++// Top-level build file where you can add configuration options common to all sub-projects/modules.
++
++buildscript {
++    repositories {
++        jcenter()
++    }
++    dependencies {
++        classpath 'com.android.tools.build:gradle:2.1.3'
++
++        // NOTE: Do not place your application dependencies here; they belong
++        // in the individual module build.gradle files
++    }
++}
++
++allprojects {
++    repositories {
++        jcenter()
++    }
++}
++
++task clean(type: Delete) {
++    delete rootProject.buildDir
++}
+Index: mycontacts/src/main/res/values/styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/values/styles.xml	(revision )
++++ mycontacts/src/main/res/values/styles.xml	(revision )
+@@ -0,0 +1,11 @@
++<resources>
++
++    <!-- Base application theme. -->
++    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
++        <!-- Customize your theme here. -->
++        <item name="colorPrimary">@color/colorPrimary</item>
++        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
++        <item name="colorAccent">@color/colorAccent</item>
++    </style>
++
++</resources>
+Index: app/src/main/res/values/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/dimens.xml	(revision )
++++ app/src/main/res/values/dimens.xml	(revision )
+@@ -0,0 +1,5 @@
++<resources>
++    <!-- Default screen margins, per the Android Design guidelines. -->
++    <dimen name="activity_horizontal_margin">16dp</dimen>
++    <dimen name="activity_vertical_margin">16dp</dimen>
++</resources>
+Index: app/src/main/java/feicui/com/hk/datastorage/sqlite/MyOpenHelper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/datastorage/sqlite/MyOpenHelper.java	(revision )
++++ app/src/main/java/feicui/com/hk/datastorage/sqlite/MyOpenHelper.java	(revision )
+@@ -0,0 +1,43 @@
++package feicui.com.hk.datastorage.sqlite;
++
++import android.content.Context;
++import android.database.sqlite.SQLiteDatabase;
++import android.database.sqlite.SQLiteOpenHelper;
++
++/**
++ * Created by Administrator on 2016/8/29.
++ *
++ * @description SQLite帮助类
++ */
++
++public class MyOpenHelper extends SQLiteOpenHelper {
++
++    //数据库版本
++    public static final int DATABASE_VERSION = 1;
++    //数据库名称
++    public static final String DATABASE_NAME = "phone.db";
++
++
++    public MyOpenHelper(Context context) {
++        super(context, DATABASE_NAME, null, DATABASE_VERSION);
++    }
++
++    @Override
++    public void onCreate(SQLiteDatabase db) {
++        //建表
++        db.execSQL(TypeEntry.SQL_CREATE_TABLE);
++    }
++
++    @Override
++    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
++        //删除原表
++        db.execSQL(TypeEntry.SQL_DELETE_TABLE);
++        //建表
++        onCreate(db);
++    }
++
++    @Override
++    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
++        onUpgrade(db, oldVersion, newVersion);
++    }
++}
+Index: app/src/main/res/layout/activity_share_pre.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_share_pre.xml	(revision )
++++ app/src/main/res/layout/activity_share_pre.xml	(revision )
+@@ -0,0 +1,49 @@
++<?xml version="1.0" encoding="utf-8"?>
++<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++        xmlns:tools="http://schemas.android.com/tools"
++        android:id="@+id/activity_shared_pre"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:orientation="vertical"
++        android:paddingBottom="@dimen/activity_vertical_margin"
++        android:paddingLeft="@dimen/activity_horizontal_margin"
++        android:paddingRight="@dimen/activity_horizontal_margin"
++        android:paddingTop="@dimen/activity_vertical_margin"
++        tools:context="feicui.com.hk.datastorage.SharePre">
++
++        <Button
++            android:id="@+id/bt_writeSp"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Write a true value"
++            android:textAllCaps="false"
++            android:textSize="15dp" />
++
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Show SharedPreferences:"
++            android:textSize="30dp" />
++
++        <TextView
++            android:id="@+id/tv_spValue"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="defeault spvalue"
++            android:textSize="30dp" />
++
++        <TextView
++            android:id="@+id/tv_database"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="SQLite Database"
++            android:textAllCaps="false"
++            android:textSize="30dp" />
++
++    </LinearLayout>
++</ScrollView>
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision )
++++ app/src/main/res/values/strings.xml	(revision )
+@@ -0,0 +1,3 @@
++<resources>
++    <string name="app_name">弹 球</string>
++</resources>
+Index: app/src/main/java/feicui/com/hk/ViewAnim.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/ViewAnim.java	(revision )
++++ app/src/main/java/feicui/com/hk/ViewAnim.java	(revision )
+@@ -0,0 +1,172 @@
++package feicui.com.hk;
++
++import android.app.Activity;
++import android.os.Bundle;
++import android.view.animation.AccelerateInterpolator;
++import android.view.animation.AlphaAnimation;
++import android.view.animation.Animation;
++import android.view.animation.AnimationSet;
++import android.view.animation.AnimationUtils;
++import android.view.animation.RotateAnimation;
++import android.view.animation.ScaleAnimation;
++import android.view.animation.TranslateAnimation;
++import android.widget.ImageView;
++import android.widget.TextView;
++
++import feicui.com.app.R;
++
++public class ViewAnim extends Activity {
++
++    //XML加载动画的TextView
++    ImageView tv_xml;
++    //代码加载动画的TextView
++    TextView tv_code;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_view_anim);
++        initView();//控件
++        initAnim();//动画
++    }
++
++    /**
++     * 装载控件
++     */
++    private void initView() {
++        tv_xml = (ImageView) findViewById(R.id.tv_XMLView);
++        tv_code = (TextView) findViewById(R.id.tv_codeView);
++    }
++
++    /**
++     * 装载动画
++     */
++    private void initAnim() {
++        //通过XML方式实现ViewAnimation
++        //加载XML中的View Animation
++        final Animation anim = AnimationUtils.loadAnimation(this, R.anim.viewanim);
++        //设置动画状态监听
++        anim.setAnimationListener(new Animation.AnimationListener() {
++            @Override
++            public void onAnimationStart(Animation animation) {
++
++            }
++
++            @Override
++            public void onAnimationEnd(Animation animation) {
++                //动画播放结束后重新开始播放
++                tv_xml.startAnimation(animation);
++            }
++
++            @Override
++            public void onAnimationRepeat(Animation animation) {
++
++            }
++        });
++        //启动动画
++        tv_xml.startAnimation(anim);
++
++
++        //通过代码的方式实现ViewAnimation
++        //创建一个旋转动画
++        RotateAnimation rotateAnimation = new RotateAnimation(
++                0f, //开始角度
++                360f, //结束角度
++                Animation.RELATIVE_TO_SELF, //旋转点X轴的类型（相对于控件本身）
++                .5f, //旋转点X轴的百分比（自身宽度的50%）
++                Animation.RELATIVE_TO_SELF,//旋转点Y轴的类型（相对于控件本身）
++                .5f//旋转点Y轴的百分比（自身宽度的50%）
++        );
++        //设置旋转的持续时间
++        rotateAnimation.setDuration(1000);
++        //设置旋转的插值器(加速)
++        rotateAnimation.setInterpolator(new AccelerateInterpolator());
++
++        //创建一个平移动画
++        TranslateAnimation translateAnimation = new TranslateAnimation(
++                0f,//起始X点的值
++                400f,//到达X点的值
++                0f,//起始Y点的值
++                400f//到达Y点的类型（这里表示相对于控件本身的点）
++        );
++        //设置平移的持续时间
++        translateAnimation.setDuration(2000);
++        //设置平移的插值器(加速)
++        translateAnimation.setInterpolator(new AccelerateInterpolator());
++        //设置动画播放延迟
++        translateAnimation.setStartOffset(1000);
++
++        //创建缩放动画
++        ScaleAnimation scaleAnimation = new ScaleAnimation(
++                1.0f, //起始X轴的缩放值
++                3.0f, //目标X轴的缩放值
++                1.0f, //起始Y轴的缩放值
++                3.0f, //目标Y轴的缩放值
++                Animation.RELATIVE_TO_SELF, //缩放点X的类型(这里为相对于控件自身)
++                .5f,//缩放点X的值(这里为相对于控件自身50%)
++                Animation.RELATIVE_TO_SELF,//缩放点Y的类型(这里为相对于控件自身)
++                .5f//缩放点Y的值(这里为相对于控件自身50%)
++        );
++        //设置缩放的持续时间
++        scaleAnimation.setDuration(2000);
++        //设置缩放的插值器(加速)
++        scaleAnimation.setInterpolator(new AccelerateInterpolator());
++        //设置动画播放延迟
++        scaleAnimation.setStartOffset(1000);
++
++        //创建透明度动画
++        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
++        //设置透明的持续时间
++        alphaAnimation.setDuration(2000);
++        //设置透明的插值器(加速)
++        alphaAnimation.setInterpolator(new AccelerateInterpolator());
++        //alphaAnimation
++        alphaAnimation.setStartOffset(1000);
++
++        //创建两个动画集合
++        final AnimationSet allSet = new AnimationSet(false);//总集合
++        AnimationSet childSet = new AnimationSet(false);//子集合
++        //向子集合中添加动画
++        childSet.addAnimation(translateAnimation);//添加平移动画
++        childSet.addAnimation(scaleAnimation);//添加缩放动画
++        childSet.addAnimation(alphaAnimation);//添加透明度动画
++        //向总集中添加动画
++        allSet.addAnimation(rotateAnimation);//添加旋转动画
++        allSet.addAnimation(childSet);//添加子集动画
++        //添加动画播放完毕后的监听以实现动画循环
++        allSet.setAnimationListener(new Animation.AnimationListener() {
++            @Override
++            public void onAnimationStart(Animation animation) {
++
++            }
++
++            @Override
++            public void onAnimationEnd(Animation animation) {
++                ////启动动画的方式1
++                //tv_code.startAnimation(allSet);
++
++                //启动动画的方式2
++                //停止动画后重设动画的状态
++                allSet.reset();
++                //重新播放动画
++                allSet.start();
++
++            }
++
++            @Override
++            public void onAnimationRepeat(Animation animation) {
++
++            }
++        });
++        ////启动动画的方式1
++        //tv_code.startAnimation(allSet);
++
++        //启动动画的方式二
++        //把动画设置给View（另一种启动动画的方式）
++        tv_code.setAnimation(allSet);
++        //启动动画
++        allSet.start();
++
++
++    }
++}
+Index: .idea/.name
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/.name	(revision )
++++ .idea/.name	(revision )
+@@ -0,0 +1,1 @@
++MyApplication
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_view_anim.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_view_anim.xml	(revision )
++++ app/src/main/res/layout/activity_view_anim.xml	(revision )
+@@ -0,0 +1,26 @@
++<?xml version="1.0" encoding="utf-8"?>
++    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++        xmlns:tools="http://schemas.android.com/tools"
++        android:id="@+id/activity_view_anim"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:orientation="vertical"
++        tools:context="feicui.com.hk.ViewAnim">
++
++
++        <ImageView
++            android:id="@+id/tv_XMLView"
++            android:layout_width="150dp"
++            android:layout_height="150dp"
++            android:background="@mipmap/ic_launcher1"
++            />
++
++        <TextView
++            android:id="@+id/tv_codeView"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="Hi，哥，早上好，么么哒！"
++            android:textSize="20sp"
++            android:textColor="#ff8080"/>
++
++    </LinearLayout>
+Index: app/src/main/java/feicui/com/hk/drawableanim/DrawableAnim.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/drawableanim/DrawableAnim.java	(revision )
++++ app/src/main/java/feicui/com/hk/drawableanim/DrawableAnim.java	(revision )
+@@ -0,0 +1,107 @@
++package feicui.com.hk.drawableanim;
++
++
++
++import android.annotation.TargetApi;
++import android.app.Activity;
++import android.graphics.drawable.AnimationDrawable;
++import android.os.Build;
++import android.os.Bundle;
++import android.view.MotionEvent;
++import android.view.Window;
++import android.view.WindowManager;
++import android.widget.ImageView;
++
++import feicui.com.app.R;
++
++/**
++ * @description 帧动画 通过XML实现和代码实现小鱼的游动
++ */
++
++public class DrawableAnim extends Activity {
++
++    ImageView iv_fish_XML;//通过XML实现帧动画的ImageView
++    ImageView iv_fish_code;//通过代码实现帧动画ImageView
++    AnimationDrawable xmlAnim;//通过XML实现帧动画的实例
++    AnimationDrawable codeAnim;//通过代码实现帧动画的实例
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
++        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
++
++        setContentView(R.layout.activity_drawable_anim);
++        initView();//装载控件
++        initAnimation();
++    }
++
++    /**
++     * 装载控件
++     */
++    public void initView(){
++        iv_fish_XML= (ImageView) findViewById(R.id.iv_fish_XML);
++        iv_fish_code= (ImageView) findViewById(R.id.iv_fish_code);
++
++
++    }
++
++    /**
++     * 装载动画
++     */
++    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
++    public void initAnimation(){
++        //XML方式
++        //把动画的XML设置成ImageView的背景，默认情况下显示第一帧
++        iv_fish_XML.setBackgroundResource(R.drawable.fishanim);
++        xmlAnim= (AnimationDrawable) iv_fish_XML.getBackground();
++
++        //代码方式
++        codeAnim = new AnimationDrawable();
++        //逐一添加帧
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_01), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_02), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_03), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_04), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_05), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_06), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_07), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_08), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_09), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_10), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_11), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_12), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_13), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_14), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_15), 200);
++        codeAnim.addFrame(getResources().getDrawable(R.drawable.fish_16), 200);
++        //把动画的设置成ImageView的背景，默认情况下显示第一帧
++        iv_fish_code.setBackground(codeAnim);
++    }
++
++    /**
++     * 点击屏幕
++     */
++    @Override
++    public boolean onTouchEvent(MotionEvent event) {
++        //每当点击屏幕
++        if (event.getAction() == MotionEvent.ACTION_DOWN) {
++            //停止动画
++            xmlAnim.stop();
++            //设置动画的当前帧为第一帧
++            xmlAnim.selectDrawable(0);
++            //启动动画
++            xmlAnim.start();
++
++            //停止动画
++            codeAnim.stop();
++            //设置动画的当前帧为第一帧
++            codeAnim.selectDrawable(0);
++            //启动动画
++            codeAnim.start();
++            codeAnim.setOneShot(false);
++        }
++        return true;
++    }
++
++}
+Index: app/src/main/res/values/styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/styles.xml	(revision )
++++ app/src/main/res/values/styles.xml	(revision )
+@@ -0,0 +1,11 @@
++<resources>
++
++    <!-- Base application theme. -->
++    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
++        <!-- Customize your theme here. -->
++        <item name="colorPrimary">@color/colorPrimary</item>
++        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
++        <item name="colorAccent">@color/colorAccent</item>
++    </style>
++
++</resources>
+Index: app/src/main/res/layout/item_transition.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/item_transition.xml	(revision )
++++ app/src/main/res/layout/item_transition.xml	(revision )
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical">
++
++    <Button
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="Button"
++        android:textAllCaps="false" />
++</LinearLayout>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/vcs.xml	(revision )
++++ .idea/vcs.xml	(revision )
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/encodings.xml	(revision )
++++ .idea/encodings.xml	(revision )
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Encoding">
++    <file url="PROJECT" charset="UTF-8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: mycontacts/src/main/res/values/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/values/dimens.xml	(revision )
++++ mycontacts/src/main/res/values/dimens.xml	(revision )
+@@ -0,0 +1,5 @@
++<resources>
++    <!-- Default screen margins, per the Android Design guidelines. -->
++    <dimen name="activity_horizontal_margin">16dp</dimen>
++    <dimen name="activity_vertical_margin">16dp</dimen>
++</resources>
+Index: app/src/main/res/layout/activity_xmlanim.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_xmlanim.xml	(revision )
++++ app/src/main/res/layout/activity_xmlanim.xml	(revision )
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/llt_container"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++
++    tools:context="feicui.com.hk.XmlanimActivity">
++
++</LinearLayout>
+Index: mycontacts/proguard-rules.pro
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/proguard-rules.pro	(revision )
++++ mycontacts/proguard-rules.pro	(revision )
+@@ -0,0 +1,17 @@
++# Add project specific ProGuard rules here.
++# By default, the flags in this file are appended to flags specified
++# in D:\Android\sdk/tools/proguard/proguard-android.txt
++# You can edit the include path and order by changing the proguardFiles
++# directive in build.gradle.
++#
++# For more details, see
++#   http://developer.android.com/guide/developing/tools/proguard.html
++
++# Add any project specific keep options here:
++
++# If your project uses WebView with JS, uncomment the following
++# and specify the fully qualified class name to the JavaScript interface
++# class:
++#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
++#   public *;
++#}
+Index: mycontacts/src/test/java/com/example/hk/mycontacts/ExampleUnitTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/test/java/com/example/hk/mycontacts/ExampleUnitTest.java	(revision )
++++ mycontacts/src/test/java/com/example/hk/mycontacts/ExampleUnitTest.java	(revision )
+@@ -0,0 +1,15 @@
++package com.example.hk.mycontacts;
++
++import org.junit.Test;
++
++import static org.junit.Assert.*;
++
++/**
++ * To work on unit tests, switch the Test Artifact in the Build Variants view.
++ */
++public class ExampleUnitTest {
++    @Test
++    public void addition_isCorrect() throws Exception {
++        assertEquals(4, 2 + 2);
++    }
++}
+\ No newline at end of file
+Index: mycontacts/src/main/java/com/example/hk/sqlite/TypeEntry.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/java/com/example/hk/sqlite/TypeEntry.java	(revision )
++++ mycontacts/src/main/java/com/example/hk/sqlite/TypeEntry.java	(revision )
+@@ -0,0 +1,27 @@
++package com.example.hk.sqlite;
++
++import android.provider.BaseColumns;
++
++/**
++ * Created by Administrator on 2016/8/29.
++ *
++ * @description 电话类型SQL契约类
++ */
++
++public class TypeEntry implements BaseColumns {
++
++    //表名
++    public static final String TABLE_NAME = "PhoneType";
++    //列名
++    public static final String COLUMMNS_NAME_TYPE = "type";
++    public static final String COLUMMNS_NAME_SUBTABLE = "subtable";
++    //创建表格的SQL语句
++    public static final String SQL_CREATE_TABLE =
++            "create table " + TABLE_NAME + " (" +
++            _ID + " integer primary key," +
++           COLUMMNS_NAME_TYPE + " text," +
++           COLUMMNS_NAME_SUBTABLE + " text" + ")";
++    //删除表格的SQL语句
++    public static final String SQL_DELETE_TABLE =
++            "drop table if exists " + TABLE_NAME;
++}
+Index: app/src/main/res/anim/transition_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/anim/transition_item.xml	(revision )
++++ app/src/main/res/anim/transition_item.xml	(revision )
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="utf-8"?>
++<layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
++    android:animation="@anim/rightin"
++    android:animationOrder="normal"
++    android:delay="30%">
++
++
++</layoutAnimation>
+\ No newline at end of file
+Index: app/src/main/java/feicui/com/hk/ShapeHolder.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/ShapeHolder.java	(revision )
++++ app/src/main/java/feicui/com/hk/ShapeHolder.java	(revision )
+@@ -0,0 +1,101 @@
++package feicui.com.hk;
++
++import android.graphics.Paint;
++import android.graphics.RadialGradient;
++import android.graphics.drawable.ShapeDrawable;
++import android.graphics.drawable.shapes.Shape;
++
++/**
++ * A data structure that holds a Shape and various properties that can be used to define
++ * how the shape is drawn.
++ * 保存了各种形状属性的数据结构，定义了如何绘制形状
++ */
++public class ShapeHolder {
++    private float x = 0, y = 0;
++    //图形绘制类
++    private ShapeDrawable shape;
++    private int color;
++    //环形放射
++    private RadialGradient gradient;
++    private float alpha = 1f;
++    private Paint paint;
++
++    public void setPaint(Paint value) {
++        paint = value;
++    }
++
++    public Paint getPaint() {
++        return paint;
++    }
++
++    public void setX(float value) {
++        x = value;
++    }
++
++    public float getX() {
++        return x;
++    }
++
++    public void setY(float value) {
++        y = value;
++    }
++
++    public float getY() {
++        return y;
++    }
++
++    public void setShape(ShapeDrawable value) {
++        shape = value;
++    }
++
++    public ShapeDrawable getShape() {
++        return shape;
++    }
++
++    public int getColor() {
++        return color;
++    }
++
++    public void setColor(int value) {
++        shape.getPaint().setColor(value);
++        color = value;
++    }
++
++    public void setGradient(RadialGradient value) {
++        Paint paint = getShape().getPaint();
++        paint.setShader(value);
++        gradient = value;
++    }
++
++    public RadialGradient getGradient() {
++        return gradient;
++    }
++
++    public void setAlpha(float alpha) {
++        this.alpha = alpha;
++        shape.setAlpha((int) ((alpha * 255f) + .5f));
++    }
++
++    public float getWidth() {
++
++        return shape.getShape().getWidth();
++    }
++
++    public void setWidth(float width) {
++        Shape s = shape.getShape();
++        s.resize(width, s.getHeight());
++    }
++
++    public float getHeight() {
++        return shape.getShape().getHeight();
++    }
++
++    public void setHeight(float height) {
++        Shape s = shape.getShape();
++        s.resize(s.getWidth(), height);
++    }
++
++    public ShapeHolder(ShapeDrawable s) {
++        shape = s;
++    }
++}
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/colors.xml	(revision )
++++ app/src/main/res/values/colors.xml	(revision )
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <color name="colorPrimary">#3F51B5</color>
++    <color name="colorPrimaryDark">#303F9F</color>
++    <color name="colorAccent">#FF4081</color>
++</resources>
+Index: mycontacts/src/main/java/com/example/hk/mycontacts/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/java/com/example/hk/mycontacts/MainActivity.java	(revision )
++++ mycontacts/src/main/java/com/example/hk/mycontacts/MainActivity.java	(revision )
+@@ -0,0 +1,92 @@
++package com.example.hk.mycontacts;
++
++import android.app.Activity;
++import android.os.Bundle;
++import android.view.Window;
++import android.widget.ListView;
++
++import com.example.hk.adapter.MainAdapter;
++
++import java.io.File;
++import java.io.FileOutputStream;
++import java.io.InputStream;
++import java.util.ArrayList;
++
++public class MainActivity extends Activity {
++
++    private static final String DATABASE_PATH ="/data/data/com.example.hk.mycontacts/databases";;
++    private ListView lv;
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
++        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
++
++        setContentView(R.layout.activity_main);
++
++        initView();
++
++
++    }
++
++    private void initView(){
++        lv=(ListView)findViewById(R.id.lv_main);
++
++        initList();
++        importDatabase();
++    }
++
++    /**
++     * 初始化电话类型数据列表
++     */
++    private void initList() {
++        //添加测试数据
++        ArrayList<String> data = new ArrayList<String>();
++        data.add("本地电话");
++        //初始化适配器
++        MainAdapter ptAdapter = new MainAdapter(this, data);
++        //给列表设置适配器
++        lv.setAdapter(ptAdapter);
++    }
++
++    /**
++     * @description 从raw文件夹中导入随APK发布的数据库
++     */
++    private void importDatabase() {
++        try {
++            //创建数据库目录，若数据库目录不存在，创建单层目录
++            File dirFile = new File(DATABASE_PATH);
++            if(!dirFile.exists()){
++                dirFile.mkdir();
++            }
++            //创建将被导入的数据库File对象
++            File file = new File(DATABASE_PATH, "phone.db");
++            //判断文件是否存在，如不存在则创建该文件，存在就直接返回
++            if (!file.exists()) {
++                file.createNewFile();
++            } else {
++                return;
++            }
++            //获得自带数据库的输入流
++            InputStream ip = getResources().openRawResource(R.raw.phone);
++            //创建将被导入的数据库输出流
++            FileOutputStream fop = new FileOutputStream(file);
++            //创建缓冲区
++            byte[] buffer = new byte[1024];
++            //将数据读入缓冲区，并写入输出流
++            while (ip.read(buffer) != -1) {
++                //将缓冲区中的数据写入输出流
++                fop.write(buffer);
++                //重置缓冲区
++                buffer = new byte[1024];
++            }
++            //关闭输入输出流
++            ip.close();
++            fop.close();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++
++    }
++}
++
+Index: mycontacts/src/androidTest/java/com/example/hk/mycontacts/ApplicationTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/androidTest/java/com/example/hk/mycontacts/ApplicationTest.java	(revision )
++++ mycontacts/src/androidTest/java/com/example/hk/mycontacts/ApplicationTest.java	(revision )
+@@ -0,0 +1,13 @@
++package com.example.hk.mycontacts;
++
++import android.app.Application;
++import android.test.ApplicationTestCase;
++
++/**
++ * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
++ */
++public class ApplicationTest extends ApplicationTestCase<Application> {
++    public ApplicationTest() {
++        super(Application.class);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision )
++++ app/src/main/AndroidManifest.xml	(revision )
+@@ -0,0 +1,37 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="feicui.com.app">
++
++    <!-- 外部存储器的写入权限 -->
++    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
++    <!--读取通讯录的权限-->
++    <uses-permission android:name="android.permission.READ_CONTACTS" />
++    <!--写入通讯录的权限-->
++    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
++
++
++    <application
++        android:allowBackup="true"
++        android:icon="@mipmap/ic_launcher1"
++        android:label="@string/app_name"
++        android:supportsRtl="true"
++        android:theme="@style/AppTheme">
++        <activity android:name="feicui.com.hk.MainActivity">
++            <intent-filter>
++                <action android:name="android.intent.action.MAIN" />
++
++                <category android:name="android.intent.category.LAUNCHER" />
++            </intent-filter>
++        </activity>
++        <activity android:name="feicui.com.hk.ViewAnim" />
++        <activity android:name="feicui.com.hk.XmlanimActivity" />
++        <activity android:name="feicui.com.hk.datastorage.CacheFile" />
++        <activity android:name="feicui.com.hk.datastorage.ExternalStorage" />
++        <activity android:name="feicui.com.hk.datastorage.InternalStorage" />
++        <activity android:name="feicui.com.hk.datastorage.SharePre" />
++        <activity android:name="feicui.com.hk.drawableanim.DrawableAnim" />
++        <activity android:name="feicui.com.transition.Transition" />
++        <activity android:name="feicui.com.hk.datastorage.ContentProviderActivity"/>
++    </application>
++
++</manifest>
+\ No newline at end of file
+Index: app/src/main/res/raw/rawfile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/raw/rawfile	(revision )
++++ app/src/main/res/raw/rawfile	(revision )
+@@ -0,0 +1,1 @@
++Hello,你好！
+\ No newline at end of file
+Index: mycontacts/src/main/res/layout/activity_welcome.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/layout/activity_welcome.xml	(revision )
++++ mycontacts/src/main/res/layout/activity_welcome.xml	(revision )
+@@ -0,0 +1,21 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/rl_context"
++    android:background="#ffffff"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:paddingBottom="@dimen/activity_vertical_margin"
++    android:paddingLeft="@dimen/activity_horizontal_margin"
++    android:paddingRight="@dimen/activity_horizontal_margin"
++    android:paddingTop="@dimen/activity_vertical_margin"
++    tools:context="com.example.hk.mycontacts.WelcomeActivity">
++
++    <ImageView
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:background="@drawable/androidy"
++        android:id="@+id/iv_welcome"
++        android:layout_centerVertical="true"
++        android:layout_centerHorizontal="true" />
++</RelativeLayout>
+Index: mycontacts/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/build.gradle	(revision )
++++ mycontacts/build.gradle	(revision )
+@@ -0,0 +1,26 @@
++apply plugin: 'com.android.application'
++
++android {
++    compileSdkVersion 24
++    buildToolsVersion "24.0.1"
++
++    defaultConfig {
++        applicationId "com.example.hk.mycontacts"
++        minSdkVersion 15
++        targetSdkVersion 24
++        versionCode 1
++        versionName "1.0"
++    }
++    buildTypes {
++        release {
++            minifyEnabled false
++            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
++        }
++    }
++}
++
++dependencies {
++    compile fileTree(dir: 'libs', include: ['*.jar'])
++    testCompile 'junit:junit:4.12'
++    compile 'com.android.support:appcompat-v7:24.2.0'
++}
+Index: mycontacts/src/main/res/layout/item_main_tv.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/layout/item_main_tv.xml	(revision )
++++ mycontacts/src/main/res/layout/item_main_tv.xml	(revision )
+@@ -0,0 +1,36 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <LinearLayout
++        android:orientation="horizontal"
++        android:layout_width="match_parent"
++        android:layout_height="60dp">
++
++
++
++    <TextView
++        android:layout_width="wrap_content"
++        android:layout_height="40dp"
++        android:layout_weight="1"
++        android:layout_marginLeft="15dp"
++        android:layout_gravity="center"
++        android:text="New Text"
++        android:textSize="20dp"
++        android:textColor="#000000"
++        android:textStyle="bold"
++        android:gravity="left|center"
++        android:id="@+id/item_main_tv" />
++
++    <ImageView
++        android:layout_width="15dp"
++        android:layout_height="15dp"
++        android:layout_gravity="center"
++        android:gravity="center"
++        android:layout_marginRight="10dp"
++        android:background="@drawable/ic_arrows_right"
++        android:id="@+id/item_main_drawable" />
++
++    </LinearLayout>
++</LinearLayout>
+Index: app/src/main/java/feicui/com/hk/datastorage/sqlite/TypeEntry.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/datastorage/sqlite/TypeEntry.java	(revision )
++++ app/src/main/java/feicui/com/hk/datastorage/sqlite/TypeEntry.java	(revision )
+@@ -0,0 +1,27 @@
++package feicui.com.hk.datastorage.sqlite;
++
++import android.provider.BaseColumns;
++
++/**
++ * Created by Administrator on 2016/8/29.
++ *
++ * @description 电话类型SQL契约类
++ */
++
++public class TypeEntry implements BaseColumns {
++
++    //表名
++    public static final String TABLE_NAME = "PhoneType";
++    //列名
++    public static final String COLUMMNS_NAME_TYPE = "type";
++    public static final String COLUMMNS_NAME_SUBTABLE = "subtable";
++    //创建表格的SQL语句
++    public static final String SQL_CREATE_TABLE =
++            "create table " + TABLE_NAME + " (" +
++                    _ID + " integer primary key," +
++                    COLUMMNS_NAME_TYPE + " text," +
++                    COLUMMNS_NAME_SUBTABLE + " text" + ")";
++    //删除表格的SQL语句
++    public static final String SQL_DELETE_TABLE =
++            "drop table if exists " + TABLE_NAME;
++}
+Index: app/src/test/java/feicui/com/app/ExampleUnitTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/test/java/feicui/com/app/ExampleUnitTest.java	(revision )
++++ app/src/test/java/feicui/com/app/ExampleUnitTest.java	(revision )
+@@ -0,0 +1,15 @@
++package feicui.com.app;
++
++import org.junit.Test;
++
++import static org.junit.Assert.*;
++
++/**
++ * To work on unit tests, switch the Test Artifact in the Build Variants view.
++ */
++public class ExampleUnitTest {
++    @Test
++    public void addition_isCorrect() throws Exception {
++        assertEquals(4, 2 + 2);
++    }
++}
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision )
++++ .idea/misc.xml	(revision )
+@@ -0,0 +1,46 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="EntryPointsManager">
++    <entry_points version="2.0" />
++  </component>
++  <component name="NullableNotNullManager">
++    <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
++    <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
++    <option name="myNullables">
++      <value>
++        <list size="4">
++          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
++          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
++          <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.Nullable" />
++          <item index="3" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
++        </list>
++      </value>
++    </option>
++    <option name="myNotNulls">
++      <value>
++        <list size="4">
++          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
++          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
++          <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
++          <item index="3" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
++        </list>
++      </value>
++    </option>
++  </component>
++  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
++    <OptionsSetting value="true" id="Add" />
++    <OptionsSetting value="true" id="Remove" />
++    <OptionsSetting value="true" id="Checkout" />
++    <OptionsSetting value="true" id="Update" />
++    <OptionsSetting value="true" id="Status" />
++    <OptionsSetting value="true" id="Edit" />
++    <ConfirmationsSetting value="0" id="Add" />
++    <ConfirmationsSetting value="0" id="Remove" />
++  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/build/classes" />
++  </component>
++  <component name="ProjectType">
++    <option name="id" value="Android" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(revision )
++++ .idea/gradle.xml	(revision )
+@@ -0,0 +1,26 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="GradleSettings">
++    <option name="linkedExternalProjectsSettings">
++      <GradleProjectSettings>
++        <option name="distributionType" value="LOCAL" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="gradleHome" value="D:\Program Files\Android\Android Studio\gradle\gradle-2.14.1" />
++        <option name="modules">
++          <set>
++            <option value="$PROJECT_DIR$" />
++            <option value="$PROJECT_DIR$/app" />
++            <option value="$PROJECT_DIR$/mycontacts" />
++          </set>
++        </option>
++        <option name="myModules">
++          <set>
++            <option value="$PROJECT_DIR$" />
++            <option value="$PROJECT_DIR$/app" />
++            <option value="$PROJECT_DIR$/mycontacts" />
++          </set>
++        </option>
++      </GradleProjectSettings>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: gradlew
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gradlew	(revision )
++++ gradlew	(revision )
+@@ -0,0 +1,160 @@
++#!/usr/bin/env bash
++
++##############################################################################
++##
++##  Gradle start up script for UN*X
++##
++##############################################################################
++
++# Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
++DEFAULT_JVM_OPTS=""
++
++APP_NAME="Gradle"
++APP_BASE_NAME=`basename "$0"`
++
++# Use the maximum available, or set MAX_FD != -1 to use that value.
++MAX_FD="maximum"
++
++warn ( ) {
++    echo "$*"
++}
++
++die ( ) {
++    echo
++    echo "$*"
++    echo
++    exit 1
++}
++
++# OS specific support (must be 'true' or 'false').
++cygwin=false
++msys=false
++darwin=false
++case "`uname`" in
++  CYGWIN* )
++    cygwin=true
++    ;;
++  Darwin* )
++    darwin=true
++    ;;
++  MINGW* )
++    msys=true
++    ;;
++esac
++
++# Attempt to set APP_HOME
++# Resolve links: $0 may be a link
++PRG="$0"
++# Need this for relative symlinks.
++while [ -h "$PRG" ] ; do
++    ls=`ls -ld "$PRG"`
++    link=`expr "$ls" : '.*-> \(.*\)$'`
++    if expr "$link" : '/.*' > /dev/null; then
++        PRG="$link"
++    else
++        PRG=`dirname "$PRG"`"/$link"
++    fi
++done
++SAVED="`pwd`"
++cd "`dirname \"$PRG\"`/" >/dev/null
++APP_HOME="`pwd -P`"
++cd "$SAVED" >/dev/null
++
++CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
++
++# Determine the Java command to use to start the JVM.
++if [ -n "$JAVA_HOME" ] ; then
++    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
++        # IBM's JDK on AIX uses strange locations for the executables
++        JAVACMD="$JAVA_HOME/jre/sh/java"
++    else
++        JAVACMD="$JAVA_HOME/bin/java"
++    fi
++    if [ ! -x "$JAVACMD" ] ; then
++        die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
++
++Please set the JAVA_HOME variable in your environment to match the
++location of your Java installation."
++    fi
++else
++    JAVACMD="java"
++    which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
++
++Please set the JAVA_HOME variable in your environment to match the
++location of your Java installation."
++fi
++
++# Increase the maximum file descriptors if we can.
++if [ "$cygwin" = "false" -a "$darwin" = "false" ] ; then
++    MAX_FD_LIMIT=`ulimit -H -n`
++    if [ $? -eq 0 ] ; then
++        if [ "$MAX_FD" = "maximum" -o "$MAX_FD" = "max" ] ; then
++            MAX_FD="$MAX_FD_LIMIT"
++        fi
++        ulimit -n $MAX_FD
++        if [ $? -ne 0 ] ; then
++            warn "Could not set maximum file descriptor limit: $MAX_FD"
++        fi
++    else
++        warn "Could not query maximum file descriptor limit: $MAX_FD_LIMIT"
++    fi
++fi
++
++# For Darwin, add options to specify how the application appears in the dock
++if $darwin; then
++    GRADLE_OPTS="$GRADLE_OPTS \"-Xdock:name=$APP_NAME\" \"-Xdock:icon=$APP_HOME/media/gradle.icns\""
++fi
++
++# For Cygwin, switch paths to Windows format before running java
++if $cygwin ; then
++    APP_HOME=`cygpath --path --mixed "$APP_HOME"`
++    CLASSPATH=`cygpath --path --mixed "$CLASSPATH"`
++    JAVACMD=`cygpath --unix "$JAVACMD"`
++
++    # We build the pattern for arguments to be converted via cygpath
++    ROOTDIRSRAW=`find -L / -maxdepth 1 -mindepth 1 -type d 2>/dev/null`
++    SEP=""
++    for dir in $ROOTDIRSRAW ; do
++        ROOTDIRS="$ROOTDIRS$SEP$dir"
++        SEP="|"
++    done
++    OURCYGPATTERN="(^($ROOTDIRS))"
++    # Add a user-defined pattern to the cygpath arguments
++    if [ "$GRADLE_CYGPATTERN" != "" ] ; then
++        OURCYGPATTERN="$OURCYGPATTERN|($GRADLE_CYGPATTERN)"
++    fi
++    # Now convert the arguments - kludge to limit ourselves to /bin/sh
++    i=0
++    for arg in "$@" ; do
++        CHECK=`echo "$arg"|egrep -c "$OURCYGPATTERN" -`
++        CHECK2=`echo "$arg"|egrep -c "^-"`                                 ### Determine if an option
++
++        if [ $CHECK -ne 0 ] && [ $CHECK2 -eq 0 ] ; then                    ### Added a condition
++            eval `echo args$i`=`cygpath --path --ignore --mixed "$arg"`
++        else
++            eval `echo args$i`="\"$arg\""
++        fi
++        i=$((i+1))
++    done
++    case $i in
++        (0) set -- ;;
++        (1) set -- "$args0" ;;
++        (2) set -- "$args0" "$args1" ;;
++        (3) set -- "$args0" "$args1" "$args2" ;;
++        (4) set -- "$args0" "$args1" "$args2" "$args3" ;;
++        (5) set -- "$args0" "$args1" "$args2" "$args3" "$args4" ;;
++        (6) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" ;;
++        (7) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" ;;
++        (8) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" ;;
++        (9) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" "$args8" ;;
++    esac
++fi
++
++# Split up the JVM_OPTS And GRADLE_OPTS values into an array, following the shell quoting and substitution rules
++function splitJvmOpts() {
++    JVM_OPTS=("$@")
++}
++eval splitJvmOpts $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS
++JVM_OPTS[${#JVM_OPTS[*]}]="-Dorg.gradle.appname=$APP_BASE_NAME"
++
++exec "$JAVACMD" "${JVM_OPTS[@]}" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+Index: app/src/main/res/layout/activity_content_provider.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_content_provider.xml	(revision )
++++ app/src/main/res/layout/activity_content_provider.xml	(revision )
+@@ -0,0 +1,38 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++        xmlns:tools="http://schemas.android.com/tools"
++        android:id="@+id/activity_content_provider"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:orientation="vertical"
++        android:paddingBottom="@dimen/activity_vertical_margin"
++        android:paddingLeft="@dimen/activity_horizontal_margin"
++        android:paddingRight="@dimen/activity_horizontal_margin"
++        android:paddingTop="@dimen/activity_vertical_margin"
++        tools:context="feicui.com.hk.datastorage.ContentProviderActivity">
++
++        <TextView
++            android:id="@+id/tv_data"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:textSize="30sp"/>
++        <EditText
++            android:id="@+id/et_search"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content" />
++
++        <Button
++            android:id="@+id/bt_search"
++            android:textAllCaps="false"
++            android:text="Search Content"
++            android:onClick="queryImage"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content" />
++        <ListView
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:id="@+id/lv_cursor">
++
++        </ListView>
++
++    </LinearLayout>
+Index: app/src/main/java/feicui/com/hk/XmlanimActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/XmlanimActivity.java	(revision )
++++ app/src/main/java/feicui/com/hk/XmlanimActivity.java	(revision )
+@@ -0,0 +1,248 @@
++package feicui.com.hk;
++
++import android.animation.Animator;
++import android.animation.AnimatorInflater;
++import android.animation.AnimatorListenerAdapter;
++import android.animation.AnimatorSet;
++import android.animation.ArgbEvaluator;
++import android.animation.Keyframe;
++import android.animation.ObjectAnimator;
++import android.animation.PropertyValuesHolder;
++import android.animation.ValueAnimator;
++import android.app.Activity;
++import android.content.Context;
++import android.graphics.Canvas;
++import android.graphics.RadialGradient;
++import android.graphics.Shader;
++import android.graphics.drawable.ShapeDrawable;
++import android.graphics.drawable.shapes.OvalShape;
++import android.os.Bundle;
++import android.view.MotionEvent;
++import android.view.View;
++import android.view.Window;
++import android.view.WindowManager;
++import android.widget.LinearLayout;
++
++import java.util.ArrayList;
++import java.util.List;
++
++import feicui.com.app.R;
++
++public class XmlanimActivity extends Activity {
++
++    //布局容器
++    LinearLayout ll_container;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++
++        //去掉标题栏和状态栏必须置于setContentView上面
++        requestWindowFeature(Window.FEATURE_NO_TITLE);
++        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
++
++        setContentView(R.layout.activity_xmlanim);
++
++
++        //装载控件
++        initView();
++    }
++
++    /**
++     * 装载View控件
++     */
++    private void initView() {
++        //所有控件的盒子
++        ll_container= (LinearLayout)findViewById(R.id.llt_container);
++        //自定义的动画控件
++        MyAnimView myAnim = new MyAnimView(this);
++        //把动画控件加入到控件盒子中
++        ll_container.addView(myAnim);
++    }
++
++    class MyAnimView extends View {
++        ShapeHolder colorBall;//颜色变化，大小变化的小球
++        int RED = 0xffff0080;//红
++        int BLUE = 0xff8000ff;//蓝
++        ShapeHolder shapeHolder;
++        List<ShapeHolder> balls = new ArrayList<ShapeHolder>();//小球列表
++
++        //实现一个简单的默认构造器（重写View必须实现一个构造器）
++        public MyAnimView(Context context) {
++            super(context);
++            //创建动画，改变对象的background属性，值会在RED和BLUE之间计算
++            ValueAnimator anim = ObjectAnimator.ofInt(this, "backgroundColor", RED, BLUE);
++            //动画的播放时间为3000ms
++            anim.setDuration(3000);
++            //设置动画的重复次数
++            anim.setRepeatCount(ValueAnimator.INFINITE);
++            //设置动画重复模式
++            anim.setRepeatMode(ValueAnimator.REVERSE);
++            //设置颜色计算器
++            anim.setEvaluator(new ArgbEvaluator());
++            //开始动画
++            anim.start();
++
++            //创建颜色变化大小变化的小球
++            addColorBall();
++
++        }
++
++        @Override
++        public boolean onTouchEvent(MotionEvent event) {
++            //点击或滑动时添加小球
++            if (event.getAction() == MotionEvent.ACTION_DOWN
++                    || event.getAction() == MotionEvent.ACTION_MOVE) {
++                //创建小球保存到ball中
++                ShapeHolder ball = addBalls(event.getX(), event.getY());
++                //把小球添加到列表中
++                balls.add(ball);
++
++                //加载XML属性动画
++                AnimatorSet animSet =
++                        (AnimatorSet) AnimatorInflater.loadAnimator(XmlanimActivity.this, R.animator.bouncer);
++                //给XML属性动画设置执行对象
++                animSet.setTarget(ball);
++                //找到最后一组动画
++                AnimatorSet lastSet =
++                        (AnimatorSet) animSet.getChildAnimations().get(1);
++                //找到最后一个动画
++                ObjectAnimator lastAnim =
++                        (ObjectAnimator) lastSet.getChildAnimations().get(1);
++                //设置动画播放结束后的监听
++                lastAnim.addListener(new AnimatorListenerAdapter() {
++                    @Override
++                    public void onAnimationEnd(Animator animation) {
++                        //获取属性对话的目标对象并从列表移除
++                        balls.remove(((ObjectAnimator) animation).getTarget());
++                    }
++                });
++                //开始动画
++                animSet.start();
++
++            }
++            return true;
++        }
++
++
++        /**
++         * 大小变动，颜色变化的小球
++         */
++
++        private void addColorBall() {
++            //创建一个椭圆
++            OvalShape circlr = new OvalShape();
++            //设置圆的水平直径和垂直直径
++            circlr.resize(100f, 100f);
++            //创建可绘制图形
++            ShapeDrawable shapeDrawable = new ShapeDrawable(circlr);
++            //创建自定义图形容器
++            colorBall = new ShapeHolder(shapeDrawable);
++            //设置球的默认坐标
++            colorBall.setX(0f);
++            colorBall.setY(0f);
++
++            //创建改变宽度的关键帧
++            Keyframe kf0 = Keyframe.ofFloat(0f, 100f);//刚开始时设置为默认宽度
++            Keyframe kf1 = Keyframe.ofFloat(.25f, 300f);//运行到一半时设置宽度为400f
++            Keyframe kf2 = Keyframe.ofFloat(.5f, 600f);//运行到一半时设置宽度为400f
++            Keyframe kf3 = Keyframe.ofFloat(1f, 200f);//结束时宽度为100f
++            //创建保存宽度关键帧的PropertyValuesHolder
++            PropertyValuesHolder widthHolder = PropertyValuesHolder.ofKeyframe(
++                    "width", kf0, kf1, kf2,kf3);
++
++            //创建改变高度的关键帧
++            Keyframe kf4 = Keyframe.ofFloat(0f, 100f);//刚开始时设置为默认高度
++            Keyframe kf5 = Keyframe.ofFloat(.25f, 300f);//运行到一半时设置高度为400f
++            Keyframe kf6 = Keyframe.ofFloat(.5f, 600f);//结束时高度为100f
++            Keyframe kf7 = Keyframe.ofFloat(1f, 200f);//结束时高度为100f
++            //创建保存高度关键帧的PropertyValuesHolder
++            PropertyValuesHolder heightHolder = PropertyValuesHolder.ofKeyframe(
++                    "height", kf4, kf5,kf6,kf7);
++
++            //创建改变颜色的关键帧
++            Keyframe kf8 = Keyframe.ofInt(0f, 0xffff8080);//刚开始时颜色
++            Keyframe kf9 = Keyframe.ofInt(.25f, 0xff80ff80);//运行中期颜色
++            Keyframe kf10 = Keyframe.ofInt(.5f, 0xff8080ff);//结束时颜色
++            Keyframe kf11 = Keyframe.ofInt(1f, 0xff80ffff);//结束时颜色
++            //创建保存颜色关键帧的PropertyValuesHolder
++            PropertyValuesHolder colorHolder = PropertyValuesHolder.ofKeyframe(
++                    "color", kf8,kf9, kf10,kf11);
++            //设置颜色计算器
++            colorHolder.setEvaluator(new ArgbEvaluator());
++
++            //创建可以控制多个属性的ObjectAnimator
++            ObjectAnimator colorBallAnim = ObjectAnimator.ofPropertyValuesHolder(
++                    colorBall, widthHolder, heightHolder, colorHolder);
++            //设置动画的运行时间3000ms
++            colorBallAnim.setDuration(3000);
++            //设置循环模式和循环次数
++            colorBallAnim.setRepeatMode(ValueAnimator.REVERSE);
++            colorBallAnim.setRepeatCount(ValueAnimator.INFINITE);
++            //执行动画
++            colorBallAnim.start();
++        }
++
++        //绘制自定义的内容只需要重写onDraw方法
++        @Override
++        protected void onDraw(Canvas canvas) {
++
++            //绘制小球列表
++            for (ShapeHolder ball : balls) {
++                //canvas.save();与canvas.retore();之间的代码为一帧的绘制
++                canvas.save();
++                canvas.translate(ball.getX(), ball.getY());//移动画布至目标位置
++                ball.getShape().draw(canvas);//绘制小球
++                canvas.restore();
++                //canvas.save();与canvas.retore();之间的代码为一帧的绘制
++            }
++
++
++            //canvas.save();与canvas.retore();之间的代码为一帧的绘制
++            canvas.save();
++            canvas.translate(colorBall.getX(), colorBall.getY());//移动画布至目标位置
++            colorBall.getShape().draw(canvas);
++            canvas.restore();
++            //canvas.save();与canvas.retore();之间的代码为一帧的绘制
++
++        }
++
++        /**
++         * 根据坐标值向屏幕中添加小球
++         *
++         * @param x 屏幕横坐标
++         * @param y 屏幕纵坐标
++         */
++        private ShapeHolder addBalls(float x, float y) {
++            //获得随机的RGB值
++            int RED = (int) (Math.random() * 255) << 16;
++            int GREEN = (int) (Math.random() * 255) << 8;
++            int BLUE = (int) (Math.random() * 255);
++            //求上面三个集合的并集
++            int COLOR = 0xff000000 | RED | GREEN | BLUE;
++            //计算一个较深的颜色作为环形放射周围的颜色
++            int DARKCOLOR = 0xff000000 | (RED / 4) | (GREEN / 4) | (BLUE / 4);
++
++            //椭圆
++            OvalShape circle = new OvalShape();
++            //设置椭圆的宽度和和高度
++            circle.resize(100f, 100f);
++            //创建ShapDrawable
++            ShapeDrawable shapeDrawable = new ShapeDrawable(circle);
++            //创建自己的ShapDrawable
++            shapeHolder = new ShapeHolder(shapeDrawable);
++            //设置绘制图形的颜色
++            shapeHolder.setColor(COLOR);
++            //设置图形的坐标
++            shapeHolder.setX(x);
++            shapeHolder.setY(y);
++            //设置图形的环形放射颜色
++            RadialGradient gradient = new RadialGradient(
++                    75f, 25f, 100, COLOR, DARKCOLOR, Shader.TileMode.CLAMP);
++            shapeHolder.setGradient(gradient);
++            //返回设置好的图形
++            return shapeHolder;
++        }
++
++    }
++}
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>GBK
+===================================================================
+--- gradle/wrapper/gradle-wrapper.properties	(revision )
++++ gradle/wrapper/gradle-wrapper.properties	(revision )
+@@ -0,0 +1,6 @@
++#Mon Aug 22 08:24:38 CST 2016
++distributionBase=GRADLE_USER_HOME
++distributionPath=wrapper/dists
++zipStoreBase=GRADLE_USER_HOME
++zipStorePath=wrapper/dists
++distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-all.zip
+Index: mycontacts/src/main/java/com/example/hk/adapter/MainAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/java/com/example/hk/adapter/MainAdapter.java	(revision )
++++ mycontacts/src/main/java/com/example/hk/adapter/MainAdapter.java	(revision )
+@@ -0,0 +1,75 @@
++package com.example.hk.adapter;
++
++import android.content.Context;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.BaseAdapter;
++
++import android.widget.TextView;
++
++import com.example.hk.mycontacts.R;
++
++import java.util.ArrayList;
++
++/**
++ * Created by Administrator on 2016/8/24.
++ */
++public class MainAdapter extends BaseAdapter {
++    private ArrayList<String> list;
++
++
++    private LayoutInflater inflater;
++
++
++    public MainAdapter(Context context, ArrayList<String> list) {
++        super();
++
++        inflater = LayoutInflater.from(context);
++        this.list=list;
++    }
++
++
++    /**
++     * listview数据的长度
++     */
++    @Override
++    public int getCount() {
++
++
++        return list.size();
++    }
++
++
++    /**
++     * 获取当行数据
++     */
++    @Override
++    public Object getItem(int position) {
++
++        return list.get(position);
++    }
++
++    /**
++     * 返回当前行下标id的位置
++     */
++    @Override
++    public long getItemId(int position) {
++
++        return position;
++    }
++
++
++    /**
++     * 显示布局
++     */
++    @Override
++    public View getView(int position, View convertView, ViewGroup parent) {
++        //布局填充器
++        convertView=inflater.inflate(R.layout.item_main_tv, null);
++        TextView name=(TextView)convertView.findViewById(R.id.item_main_tv);
++        name.setText(list.get(position));
++        return convertView;
++    }
++
++}
+Index: app/src/main/java/feicui/com/hk/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/MainActivity.java	(revision )
++++ app/src/main/java/feicui/com/hk/MainActivity.java	(revision )
+@@ -0,0 +1,364 @@
++package feicui.com.hk;
++
++import android.animation.Animator;
++import android.animation.AnimatorListenerAdapter;
++import android.animation.AnimatorSet;
++import android.animation.ArgbEvaluator;
++import android.animation.FloatEvaluator;
++import android.animation.ObjectAnimator;
++import android.animation.ValueAnimator;
++import android.app.Activity;
++import android.content.Context;
++import android.content.Intent;
++import android.graphics.Canvas;
++import android.graphics.RadialGradient;
++import android.graphics.Shader;
++import android.graphics.drawable.ShapeDrawable;
++import android.graphics.drawable.shapes.OvalShape;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.MotionEvent;
++import android.view.View;
++import android.view.Window;
++import android.view.WindowManager;
++import android.view.animation.AccelerateInterpolator;
++import android.view.animation.DecelerateInterpolator;
++import android.view.animation.LinearInterpolator;
++import android.widget.Button;
++import android.widget.LinearLayout;
++
++import java.util.ArrayList;
++import java.util.List;
++
++import feicui.com.app.R;
++import feicui.com.hk.datastorage.CacheFile;
++import feicui.com.hk.datastorage.ContentProviderActivity;
++import feicui.com.hk.datastorage.ExternalStorage;
++import feicui.com.hk.datastorage.InternalStorage;
++import feicui.com.hk.datastorage.SharePre;
++import feicui.com.hk.drawableanim.DrawableAnim;
++import feicui.com.transition.Transition;
++
++public class MainActivity extends Activity implements View.OnClickListener {
++
++    //布局容器
++    LinearLayout ll_container;
++    //切换至XML实现属性动画的按钮
++    Button main_bt_propertyanim;
++    Button main_bt_viewanim;
++    Button main_bt_dawable;
++    Button main_bt_data;
++    Button main_bt_datainter;
++    Button main_bt_cachedata;
++    Button main_bt_storage;
++    Button main_bt_transition;
++    Button main_content_provider;
++
++
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        //去掉标题栏和状态栏必须置于setContentView上面
++        requestWindowFeature(Window.FEATURE_NO_TITLE);
++        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
++
++        setContentView(R.layout.activity_main);
++
++
++        //装载控件
++        initView();
++
++        //ValueAnimator
++        ValueAnimTest();
++
++    }
++
++    /**
++     * 装载View控件
++     */
++    private void initView() {
++        //所有控件的盒子
++        ll_container = (LinearLayout) findViewById(R.id.ll_container);
++        //自定义的动画控件
++        MyAnimView myAnim = new MyAnimView(this);
++        //把动画控件加入到控件盒子中
++        ll_container.addView(myAnim);
++
++        //设置跳转到XMLAnim的监听
++        main_bt_propertyanim = (Button) findViewById(R.id.main_bt_propertyanim);
++        main_bt_propertyanim.setOnClickListener(this);
++        main_bt_viewanim = (Button) findViewById(R.id.main_bt_viewanim);
++        main_bt_viewanim.setOnClickListener(this);
++        main_bt_dawable = (Button) findViewById(R.id.main_bt_dawable);
++        main_bt_dawable.setOnClickListener(this);
++        main_bt_data = (Button) findViewById(R.id.main_bt_data);
++        main_bt_data.setOnClickListener(this);
++        main_bt_datainter = (Button) findViewById(R.id.main_bt_datainter);
++        main_bt_datainter.setOnClickListener(this);
++        main_bt_cachedata = (Button) findViewById(R.id.main_cache_data);
++        main_bt_cachedata.setOnClickListener(this);
++        main_bt_storage = (Button) findViewById(R.id.main_external_storage);
++        main_bt_storage.setOnClickListener(this);
++        main_bt_transition = (Button) findViewById(R.id.main_bt_transition);
++        main_bt_transition.setOnClickListener(this);
++        main_content_provider = (Button) findViewById(R.id.main_content_provider);
++        main_content_provider.setOnClickListener(this);
++
++    }
++
++    @Override
++    public void onClick(View v) {
++        Intent intent;//用来切换Activity的Intent
++        switch (v.getId()) {
++            case R.id.main_bt_propertyanim:
++                intent = new Intent(MainActivity.this, XmlanimActivity.class);//当前Activity跳转到XMLAnim
++                startActivity(intent);//启动Activity
++                break;
++            case R.id.main_bt_viewanim:
++                intent = new Intent(MainActivity.this, ViewAnim.class);//当前Activity跳转到XMLAnim
++                startActivity(intent);//启动Activity
++                break;
++            case R.id.main_bt_dawable:
++                intent = new Intent(MainActivity.this, DrawableAnim.class);//当前Activity跳转到DrawableAnim
++                startActivity(intent);//启动Activity
++                break;
++            case R.id.main_bt_data:
++                intent = new Intent(MainActivity.this, SharePre.class);//当前Activity跳转到SharePre
++                startActivity(intent);//启动Activity
++                break;
++            case R.id.main_bt_datainter:
++                intent = new Intent(MainActivity.this, InternalStorage.class);//当前Activity跳转到InternalStorage
++                startActivity(intent);//启动Activity
++                break;
++            case R.id.main_cache_data:
++                intent = new Intent(MainActivity.this, CacheFile.class);//当前Activity跳转到CacheFile
++                startActivity(intent);//启动Activity
++                break;
++            case R.id.main_external_storage:
++                intent = new Intent(MainActivity.this, ExternalStorage.class);//当前Activity跳转到ExternalStorage
++                startActivity(intent);//启动Activity
++                break;
++            case R.id.main_bt_transition:
++                intent = new Intent(MainActivity.this, Transition.class);//当前Activity跳转到Transition
++                startActivity(intent);//启动Activity
++                break;
++            case R.id.main_content_provider:
++                intent = new Intent(MainActivity.this, ContentProviderActivity.class);//当前Activity跳转到Transition
++                startActivity(intent);//启动Activity
++                break;
++
++        }
++    }
++
++
++
++
++    class MyAnimView extends View {
++        int RED = 0xffff8080;//浅红
++        int BLUE = 0xff8080ff;//浅蓝
++        ShapeHolder shapeHolder;
++        List<ShapeHolder> balls = new ArrayList<ShapeHolder>();
++
++
++        //实现一个简单的默认构造器（重写View必须实现一个构造器）
++        public MyAnimView(Context context) {
++            super(context);
++            //创建动画，改变对象的background属性，值会在RED和BLUE之间计算
++            ValueAnimator anim = ObjectAnimator.ofInt(this, "backgroundColor", RED, BLUE);
++            //动画的播放时间为3000ms
++            anim.setDuration(3000);
++            //设置动画的重复次数
++            anim.setRepeatCount(ValueAnimator.INFINITE);
++            //设置动画重复模式
++            anim.setRepeatMode(ValueAnimator.REVERSE);
++            //设置颜色计算器
++            anim.setEvaluator(new ArgbEvaluator());
++            //开始动画
++            anim.start();
++
++        }
++
++        //自定义view的触摸逻辑
++        @Override
++        public boolean onTouchEvent(MotionEvent event) {
++            //如果触摸事件为点击或移动
++
++            if (event.getAction() == MotionEvent.ACTION_DOWN ||
++                    event.getAction() == MotionEvent.ACTION_MOVE) {
++                //引用添加的小球
++                ShapeHolder ball = addBalls(event.getX(), event.getY());
++                //把小球存储到容器中
++                balls.add(ball);
++                //创建小球下落的动画
++                int h = getHeight();//整个view的高
++                float currY = event.getY();//当前点击Y的位置
++                float currX = event.getX();//当前点击X的位置
++                float currWidth = ball.getWidth();//当前的宽度
++                float currHieght = ball.getHeight();//当前的高度
++                float endY = h - 50f;//view的高度减去小球的高度+50f
++                long duration = 500;//从屏幕顶端到底端的掉落时间
++                long realDuration = (long) ((h - shapeHolder.getY()) / h * duration);//从屏幕任意位置掉落的真实持续时间
++
++                //小球下落的动画
++                ValueAnimator downAnim = ObjectAnimator.ofFloat(shapeHolder,
++                        "y", currY, endY);//创建控制y属性的属性动画
++                downAnim.setDuration(realDuration);//设置整个动画的持续时间
++                downAnim.setInterpolator(new AccelerateInterpolator());//设置一个加速的插值
++
++
++                //小球压缩的动画
++                //1.左移小球的x坐标
++                ValueAnimator squash1Anim = ObjectAnimator.ofFloat(shapeHolder,
++                        "x", currX, currX - 25f);//创建控制x属性的属性动画,左移50像素
++                squash1Anim.setDuration(realDuration / 4);//设置整个动画的持续时间,比掉落时间要短
++                squash1Anim.setInterpolator(new DecelerateInterpolator());//设置一个减速的插值（越来越难压）
++                //小球回弹
++                squash1Anim.setRepeatCount(1);//让它循环播放一次
++                squash1Anim.setRepeatMode(ValueAnimator.REVERSE);//反序播放
++
++                //小球压缩的动画
++                //2.增加小球的宽度
++                ValueAnimator squash2Anim = ObjectAnimator.ofFloat(shapeHolder,
++                        "width", currWidth, currWidth + 50f);//创建控制width属性的属性动画,增加50像素
++                squash2Anim.setDuration(realDuration / 4);//设置整个动画的持续时间,比掉落时间要短
++                squash2Anim.setInterpolator(new DecelerateInterpolator());//设置一个减速的插值（越来越难压）
++                //小球回弹
++                squash2Anim.setRepeatCount(1);//让它循环播放一次
++                squash2Anim.setRepeatMode(ValueAnimator.REVERSE);//反序播放
++
++                //小球压缩的动画
++                //3.降低小球
++                ValueAnimator strech1Anim = ObjectAnimator.ofFloat(shapeHolder,
++                        "y", endY, endY + 50f);//创建控制y属性的属性动画,增加50像素
++                strech1Anim.setDuration(realDuration / 4);//设置整个动画的持续时间,比掉落时间要短
++                strech1Anim.setInterpolator(new DecelerateInterpolator());//设置一个减速的插值（越来越难压）
++                //小球回弹
++                strech1Anim.setRepeatCount(1);//让它循环播放一次
++                strech1Anim.setRepeatMode(ValueAnimator.REVERSE);//反序播放
++
++                //小球压缩的动画
++                //4.减少小球的高度
++                ValueAnimator strech2Anim = ObjectAnimator.ofFloat(shapeHolder,
++                        "height", currHieght, currHieght - 50);//创建控制height属性的属性动画,增加50像素
++                strech2Anim.setDuration(realDuration / 4);//设置整个动画的持续时间,比掉落时间要短
++                strech2Anim.setInterpolator(new DecelerateInterpolator());//设置一个减速的插值（越来越难压）
++                //小球回弹
++                strech2Anim.setRepeatCount(1);//让它循环播放一次
++                strech2Anim.setRepeatMode(ValueAnimator.REVERSE);//反序播放
++
++                //小球上升的动画
++                ValueAnimator upAnim = ObjectAnimator.ofFloat(shapeHolder,
++                        "y", endY, currY);//创建控制y属性的属性动画
++                upAnim.setDuration(realDuration);//设置整个动画的持续时间
++                upAnim.setInterpolator(new DecelerateInterpolator());//设置一个减速的插值
++
++                //小球消失的动画
++                ValueAnimator fadeAnim = ObjectAnimator.ofFloat(shapeHolder,
++                        "alpha", 1.0f, 0.0f);//创建控制透明度属性的属性动画
++                fadeAnim.setDuration(realDuration / 4);//设置整个动画的持续时间
++                fadeAnim.setInterpolator(new LinearInterpolator());//设置一个线性的插值
++                //添加一个动画播放结束后的监听
++                fadeAnim.addListener(new AnimatorListenerAdapter() {
++                    @Override
++                    public void onAnimationEnd(Animator animation) {
++                        //把动画完成后的小球移出容器
++                        balls.remove(((ObjectAnimator) animation).getTarget());
++                    }
++                });
++
++                //创建第一组弹球运动的动画
++                AnimatorSet bouncerSet = new AnimatorSet();
++                bouncerSet.play(downAnim).before(squash1Anim);//在squash1Anim之前播放downAnim
++                bouncerSet.play(squash1Anim).with(squash2Anim);//在播放squash1Anim时播放squash2Anim
++                bouncerSet.play(squash1Anim).with(strech1Anim);//在播放squash1Anim时播放strech1Anim
++                bouncerSet.play(squash1Anim).with(strech2Anim);//在播放squash1Anim时播放strech2Anim
++                bouncerSet.play(upAnim).after(strech2Anim);//在播放strech2Anim之后播放upAnim
++                //练习多个Animator嵌套
++                AnimatorSet animSet = new AnimatorSet();
++                animSet.play(fadeAnim).after(bouncerSet);//在bouncerSet之后播放fadeAnim
++                animSet.start();//启动动画
++            }
++
++            return true;//return true代表触摸事件已经被截取处理完毕
++        }
++
++        //绘制自定义的内容只需要重写onDraw方法
++        @Override
++        protected void onDraw(Canvas canvas) {
++            //移动画布至指定的区域
++            for (ShapeHolder ball : balls) {
++                //canvas.save();与canvas.retore();之间的代码为一帧的绘制
++                canvas.save();
++                //把画布移动到小球的坐标，默认坐标点是左上角，所以要加偏移量挪到中心
++                canvas.translate(ball.getX() - 50f, ball.getY() - 50f);
++                ball.getShape().draw(canvas);
++                canvas.restore();
++                //canvas.save();与canvas.retore();之间的代码为一帧的绘制
++            }
++        }
++
++        /**
++         * 根据坐标值向屏幕中添加小球
++         *
++         * @param x 屏幕横坐标
++         * @param y 屏幕纵坐标
++         */
++        private ShapeHolder addBalls(float x, float y) {
++            //获得随机的RGB值
++            int RED = (int) (Math.random() * 255) << 16;
++            int GREEN = (int) (Math.random() * 255) << 8;
++            int BLUE = (int) (Math.random() * 255);
++            //求上面三个集合的并集
++            int COLOR = 0xff000000 | RED | GREEN | BLUE;
++            //计算一个较深的颜色作为环形放射周围的颜色
++            int DARKCOLOR = 0xff000000 | (RED / 4) | (GREEN / 4) | (BLUE / 4);
++
++            //椭圆
++            OvalShape circle = new OvalShape();
++            //设置椭圆的宽度和和高度
++            circle.resize(100f, 100f);
++            //创建ShapDrawable
++            ShapeDrawable shapeDrawable = new ShapeDrawable(circle);
++            //创建自己的ShapDrawable
++            shapeHolder = new ShapeHolder(shapeDrawable);
++            //设置绘制图形的颜色
++            shapeHolder.setColor(COLOR);
++            //设置图形的坐标
++            shapeHolder.setX(x);
++            shapeHolder.setY(y);
++            //设置图形的环形放射颜色
++            RadialGradient gradient = new RadialGradient(
++                    75f, 25f, 100, COLOR, DARKCOLOR, Shader.TileMode.CLAMP);
++            shapeHolder.setGradient(gradient);
++            //返回设置好的图形
++            return shapeHolder;
++        }
++
++    }
++
++    /**
++     * 测试ValueAnimator
++     */
++    private void ValueAnimTest() {
++        //声明一个动态属性值为float的属性动画，属性值在0~1间计算
++        ValueAnimator animation = ValueAnimator.ofFloat(0f, 1f);
++        //设置动画的播放时间为1000ms
++        animation.setDuration(1000);
++        //设置动画属性的计算器
++        animation.setEvaluator(new FloatEvaluator());
++        //设置动画的加速插值器
++        animation.setInterpolator(new AccelerateInterpolator());
++        //添加值计算时的监听
++        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
++            @Override
++            public void onAnimationUpdate(ValueAnimator animation) {
++                //获取动画值计算途中的值
++                Log.i("lichao", (float) animation.getAnimatedValue() + "");
++            }
++        });
++        //开始动画
++        animation.start();
++    }
++
++}
+Index: mycontacts/src/main/java/com/example/hk/sqlite/MyOpenHelper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/java/com/example/hk/sqlite/MyOpenHelper.java	(revision )
++++ mycontacts/src/main/java/com/example/hk/sqlite/MyOpenHelper.java	(revision )
+@@ -0,0 +1,43 @@
++package com.example.hk.sqlite;
++
++import android.content.Context;
++import android.database.sqlite.SQLiteDatabase;
++import android.database.sqlite.SQLiteOpenHelper;
++
++/**
++ * Created by Administrator on 2016/8/29.
++ *
++ * @description SQLite帮助类
++ */
++
++public class MyOpenHelper extends SQLiteOpenHelper {
++
++    //数据库版本
++    public static final int DATABASE_VERSION = 1;
++    //数据库名称
++    public static final String DATABASE_NAME = "phone.db";
++
++
++    public MyOpenHelper(Context context) {
++        super(context, DATABASE_NAME, null, DATABASE_VERSION);
++    }
++
++    @Override
++    public void onCreate(SQLiteDatabase db) {
++        //建表
++        db.execSQL(TypeEntry.SQL_CREATE_TABLE);
++    }
++
++    @Override
++    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
++        //删除原表
++        db.execSQL(TypeEntry.SQL_DELETE_TABLE);
++        //建表
++        onCreate(db);
++    }
++
++    @Override
++    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
++        onUpgrade(db, oldVersion, newVersion);
++    }
++}
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(revision )
++++ app/src/main/res/layout/activity_main.xml	(revision )
+@@ -0,0 +1,95 @@
++<?xml version="1.0" encoding="utf-8"?>
++    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++        xmlns:tools="http://schemas.android.com/tools"
++        android:id="@+id/ll_container"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:orientation="vertical"
++        tools:context="feicui.com.hk.MainActivity">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content">
++
++            <Button
++                android:id="@+id/main_bt_propertyanim"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:background="#ff80ff"
++                android:text="属性动画" />
++
++            <Button
++                android:id="@+id/main_bt_viewanim"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:background="#80ff80"
++                android:text="补间动画" />
++
++            <Button
++                android:id="@+id/main_bt_dawable"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:background="#8000ff"
++                android:text="帧  动  画" />
++            <Button
++                android:id="@+id/main_bt_transition"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:background="#0500f0"
++                android:text="过渡动画" />
++        </LinearLayout>
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content">
++
++            <Button
++                android:id="@+id/main_bt_data"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:background="#0080ff"
++                android:text="数据存储" />
++
++            <Button
++                android:id="@+id/main_bt_datainter"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:background="#61f0f8"
++                android:text="内部存储" />
++
++            <Button
++                android:id="@+id/main_cache_data"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:background="#ff00f8"
++                android:text="缓存存储" />
++            <Button
++                android:id="@+id/main_external_storage"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:background="#0ff088"
++                android:text="SD卡存储" />
++        </LinearLayout>
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content">
++
++        <Button
++            android:id="@+id/main_content_provider"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_weight="1"
++            android:background="#9070ff"
++            android:text="内容提供者" />
++
++</LinearLayout>
++
++    </LinearLayout>
+Index: app/src/main/java/feicui/com/transition/Transition.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/transition/Transition.java	(revision )
++++ app/src/main/java/feicui/com/transition/Transition.java	(revision )
+@@ -0,0 +1,177 @@
++package feicui.com.transition;
++
++import android.animation.Animator;
++import android.animation.AnimatorListenerAdapter;
++import android.animation.LayoutTransition;
++import android.animation.ObjectAnimator;
++import android.animation.PropertyValuesHolder;
++import android.animation.ValueAnimator;
++import android.view.View;
++import android.view.ViewGroup;
++import android.view.animation.Animation;
++import android.view.animation.AnimationUtils;
++import android.view.animation.LayoutAnimationController;
++import android.widget.Button;
++import android.widget.LinearLayout;
++import android.widget.ListView;
++
++import feicui.com.app.R;
++import feicui.com.hk.BaseActivity;
++
++/**
++ * @description 布局过渡动画类
++ * @author Administrator 2016-08-31
++ */
++
++public class Transition extends BaseActivity {
++    //被添加的view的容器
++    LinearLayout ll_tran_container;
++
++    //当前被添加的按钮的数量
++    int i_count;
++
++    //自定义布局过渡动画
++    LayoutTransition transition=new LayoutTransition();
++    //展示item过渡动画的列表
++    ListView lv_transition;
++
++
++    @Override
++    protected int setContent() {
++        return R.layout.activity_transition;
++    }
++
++    @Override
++    protected void initView() {
++        ll_tran_container = (LinearLayout) findViewById(R.id.ll_tran_container);
++        lv_transition= (ListView) findViewById(R.id.lv_transition);
++        //设置数据列表
++        setListView();
++        //装载过渡动画
++        setTransition();
++    }
++
++    /**
++     * @description 设置数据列表
++     */
++    private void setListView() {
++        //设置列表的适配器
++        lv_transition.setAdapter(new TransitionAdapter(this));
++        //加载单个item的动画
++        Animation rightin = AnimationUtils.loadAnimation(this, R.anim.rightin);
++        //根据单个的item动画创建布局过渡动画控制器
++        LayoutAnimationController lc = new LayoutAnimationController(rightin);
++        //设置动画组延迟
++        lc.setDelay(0.3f);
++        //设置动画组播放次序
++        lc.setOrder(LayoutAnimationController.ORDER_RANDOM);
++        //给目标ListView设置item布局过渡动画
++        lv_transition.setLayoutAnimation(lc);
++    }
++
++    @Override
++    protected void setListener() {
++
++    }
++
++    /**
++     * @description 向容器中添加按钮,点击后添加
++     * @param view 监听的view
++     */
++    public void addButton(View view){
++        i_count++;//数量增加
++        //实例化一个按钮
++        Button button = new Button(this);
++        //按钮设置文本
++        button.setText("button" + i_count);
++        //取消文本字母大写
++        button.setAllCaps(false);
++        //实例化布局参数
++        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
++        //给待添加的按钮添加布局参数
++        button.setLayoutParams(params);
++        ////添加到容器中,子view大于2个时在第2个位置加入控件，否则直接加入
++//        if (i_count>2){
++//            ll_tran_container.addView(button,0);
++//        }else
++            ll_tran_container.addView(button,0);
++
++
++    }
++
++    /**
++     * @description 向容器中移除按钮,点击后触发
++     * @param view 监听的view
++     */
++    public void removeButton(View view){
++        //判断当前是否有足够的按钮
++        if(i_count > 0){
++            //数量递减
++            i_count --;
++            //删除下标为0的控件
++            ll_tran_container.removeViewAt(0);
++        }
++
++
++    }
++    /**
++     * @descripition 设置布局的过渡动画
++     */
++    private void setTransition(){
++        //给指定容器设置过渡动画
++        ll_tran_container.setLayoutTransition(transition);
++        //自定义添加view动画
++        //target参数填null，最终setAnimator的时候会自动设置
++        ValueAnimator appearAnim = ObjectAnimator.ofFloat(null,"rotationY",90f,0f);
++
++        //设置一个默认的播放时间(3000ms)
++        appearAnim.setDuration(3000);
++
++        //给过渡动画指定动画类型和动画效果
++        transition.setAnimator(LayoutTransition.APPEARING, appearAnim);
++
++
++        //自定义删除View的动画
++        //target参数填null，最终setAnimator的时候会自动设置
++        ValueAnimator disappearAnim = ObjectAnimator.ofFloat(null, "rotationY", 0f, 180f, 0f);
++        //设置一个默认的播放时间(3000ms)
++        disappearAnim.setDuration(3000);
++        //给过渡动画指定动画类型和动画效果
++        transition.setAnimator(LayoutTransition.DISAPPEARING, disappearAnim);
++
++
++        //对于CHANGE_APPEARING 和 CHANGE_DISAPPEARING 类型的过渡动画
++        //1.必须使用PropertyValuesHolder来构造动画
++        //2.必须同时指定left top right bottom属性 否则无法正确显示
++        //3.动画结束后也需要将view改为原样，否则会出现BUG
++        //4.构建ObjectAnimator时需要设置对象
++
++        //设置CHANGE_APPEARING类型的动画
++        PropertyValuesHolder left=PropertyValuesHolder.ofInt("left",0,0);
++        PropertyValuesHolder right=PropertyValuesHolder.ofInt("right",0,0);
++        PropertyValuesHolder top=PropertyValuesHolder.ofInt("top",0,0);
++        PropertyValuesHolder bottom=PropertyValuesHolder.ofInt("bottom",0,0);
++        //编写自定义的CHANGE_APPEARING动画
++        PropertyValuesHolder ScaleX=PropertyValuesHolder.ofFloat("ScaleX",1f,2f,1f);
++        //通过PropertyValuesHolder构建动画
++        ValueAnimator cgapAnim=ObjectAnimator.ofPropertyValuesHolder(ll_tran_container,left,right,top,bottom,ScaleX);
++        //
++        cgapAnim.addListener(new AnimatorListenerAdapter() {
++            @Override
++            public void onAnimationEnd(Animator animation) {
++                ((View)((ObjectAnimator)animation).getTarget()).setScaleX(1f);
++            }
++        });
++        //给过渡动画指定动画类型和动画效果
++        transition.setAnimator(LayoutTransition.CHANGE_APPEARING, cgapAnim);
++        //设置动画组之间的延迟
++        transition.setStagger(LayoutTransition.CHANGE_APPEARING, 30);
++
++        //这里借用了CHANGE_APPEARING的动画效果
++        transition.setAnimator(LayoutTransition.CHANGE_DISAPPEARING, cgapAnim);
++        //设置动画组之间的延迟
++        transition.setStagger(LayoutTransition.CHANGE_DISAPPEARING, 30);
++
++
++    }
++}
+Index: app/src/main/res/layout/item_cursor.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/item_cursor.xml	(revision )
++++ app/src/main/res/layout/item_cursor.xml	(revision )
+@@ -0,0 +1,27 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:minHeight="40dp">
++
++    <TextView
++        android:id="@+id/tv_id"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_alignParentLeft="true"
++        android:layout_centerVertical="true"
++        android:text="deafult"
++        android:textSize="20dp" />
++
++    <TextView
++        android:maxWidth="200dp"
++        android:maxLines="1"
++        android:id="@+id/tv_display"
++        android:ellipsize="end"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_alignParentRight="true"
++        android:layout_centerVertical="true"
++        android:text="deafult"
++        android:textSize="20dp" />
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/java/feicui/com/hk/datastorage/CacheFile.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/datastorage/CacheFile.java	(revision )
++++ app/src/main/java/feicui/com/hk/datastorage/CacheFile.java	(revision )
+@@ -0,0 +1,116 @@
++package feicui.com.hk.datastorage;
++
++import android.widget.TextView;
++
++import java.io.File;
++import java.io.FileInputStream;
++import java.io.FileOutputStream;
++
++import feicui.com.app.R;
++import feicui.com.hk.BaseActivity;
++
++/**
++ *
++ * @descriptin 缓存数据读写的demo
++ */
++public class CacheFile extends BaseActivity {
++    //缓存文件数据内容
++    TextView tv_cacheData;
++    //缓存文件的文件名
++    String FILE_NAME = "cache file";
++    //缓存文件的数据
++    String DATA = "Hello cache file!";
++
++    @Override
++    protected int setContent() {
++        return R.layout.activity_cache_file;
++    }
++
++    @Override
++    protected void initView() {
++        tv_cacheData = (TextView) findViewById(R.id.tv_cacheData);
++
++        writeFile(FILE_NAME);
++        readFile(FILE_NAME);
++        deleteCache(getCacheDir() + "/" + FILE_NAME);
++    }
++
++    @Override
++    protected void setListener() {
++
++    }
++
++    /**
++     * @param fileName 文件名
++     * @description 写入一个缓存文件
++     */
++    private void writeFile(String fileName) {
++        //根据缓存文件创建一个File
++        File file = new File(getCacheDir(), fileName);
++
++        try {
++            //开启缓存文件上的输出流
++            FileOutputStream fop = new FileOutputStream(file);
++            //向输出流中写入数据
++            fop.write(DATA.getBytes("UTF-8"));
++            //关闭输出流
++            fop.close();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++    }
++
++
++    /**
++     * @param fileName 文件名
++     * @description 读取一个缓存文件的数据
++     */
++    private void readFile(String fileName) {
++        //根据缓存文件创建一个File
++        File file = new File(getCacheDir(), fileName);
++
++        try {
++            //开启缓存文件上的输入流
++            FileInputStream fip = new FileInputStream(file);
++            //创建临时字符保存数据
++            String temp = "";
++            //数据缓冲区
++            byte[] buffer = new byte[1024];
++            try {
++                //向缓冲区中读入数据，直至读到-1(数据读完)
++                while (fip.read(buffer) != -1) {
++                    temp += new String(buffer);
++                }
++            } catch (Exception e) {
++                e.printStackTrace();
++            }
++            //关闭输入流
++            fip.close();
++            //内部存储器文件系统绝对目录
++            temp += " getFilesDir() = " + getFilesDir() + "\n\n";
++            //创建或者打开一个内部存储空间的目录（相对路径）
++            temp += "getDir = " + getDir("cache", MODE_PRIVATE) + "\n\n";
++            //获得文件列表(缓存文件夹中的)
++            File cachePath = getCacheDir();
++            //遍历缓存文件夹下的文件，打印路径
++            for (File cacheFile : cachePath.listFiles()) {
++                temp += "fileList()'s file = " + cacheFile.getPath() + "\n";
++            }
++
++            //在UI上更新数据
++            tv_cacheData.setText(temp);
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++
++    }
++
++    /**
++     * @description 删除某个缓存文件
++     * @param fileName 删除文件的文件名
++     */
++    private void deleteCache(String fileName) {
++        File file = new File(fileName);
++        file.delete();
++    }
++}
+Index: app/src/main/java/feicui/com/hk/datastorage/SharePre.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/datastorage/SharePre.java	(revision )
++++ app/src/main/java/feicui/com/hk/datastorage/SharePre.java	(revision )
+@@ -0,0 +1,238 @@
++package feicui.com.hk.datastorage;
++
++import android.Manifest;
++import android.content.ContentValues;
++import android.content.SharedPreferences;
++import android.content.pm.PackageManager;
++import android.database.Cursor;
++import android.database.sqlite.SQLiteDatabase;
++import android.support.v4.app.ActivityCompat;
++import android.support.v4.content.ContextCompat;
++import android.view.View;
++import android.widget.Button;
++import android.widget.TextView;
++
++import feicui.com.app.R;
++import feicui.com.hk.BaseActivity;
++import feicui.com.hk.datastorage.sqlite.MyOpenHelper;
++import feicui.com.hk.datastorage.sqlite.TypeEntry;
++
++/**
++ * 2016-08-25
++ * @description SharedPreferences的使用demo
++ */
++public class SharePre extends BaseActivity implements View.OnClickListener {
++
++    //Shared Preferences获取的值
++    TextView tv_spvalue;
++    //更改SharedPreferences值的按钮
++    Button bt_writeSp;
++
++    //显示数据库内容的文本
++    TextView tv_database;
++    //自定义数据库帮助类
++    MyOpenHelper mHelper;
++    //申请外部存储器写权限的申请码
++    private final int WRITE_EXTERNAL_STORAGE = 0;
++
++    //Shared Preferences文件名
++    private final String SPFILE_NAME = "spfile";
++    //SharedPrenferences存入的布尔值key
++    private final String BOOL_NAME = "myBoolean";
++
++    @Override
++    protected int setContent() {
++        return R.layout.activity_share_pre;
++    }
++
++    @Override
++    protected void initView() {
++        //获得openhleper实例
++        mHelper = new MyOpenHelper(this);
++        //加载控件
++        tv_spvalue = (TextView) findViewById(R.id.tv_spValue);
++        bt_writeSp = (Button) findViewById(R.id.bt_writeSp);
++
++        tv_database = (TextView) findViewById(R.id.tv_database);
++        //操作数据
++        readSPValue();
++
++        createDatabase();
++
++        //动态申请权限
++        requestPermission();
++
++    }
++
++    @Override
++    protected void setListener() {
++        bt_writeSp.setOnClickListener(this);
++
++    }
++
++    /**
++     * @description 向SharedPreferences中写入值
++     */
++    private void writeSPValue() {
++        //获得Sharedpreferences的实例，参数1为文件名， 参数二为文件模式
++        //默认模式为0，即MODE_PRIVATE,有对应文件则读取，无则创建
++        SharedPreferences sp = getSharedPreferences(SPFILE_NAME, 0);
++        //获得Sharedpreferences的编辑器
++        SharedPreferences.Editor editor = sp.edit();
++        //向Sharedpreferences添加一个key为"myBoolean"的布尔值
++        editor.putBoolean(BOOL_NAME, true);
++        //提交数据
++        editor.commit();
++        //读取sp中的对应boolean数据
++        boolean temp = sp.getBoolean(BOOL_NAME, false);
++        //设置到UI中去展示
++        tv_spvalue.setText(temp + "");
++    }
++
++    /**
++     * @description 读取SharedPreferences中的值
++     */
++    private void readSPValue() {
++        //获得Sharedpreferences的实例，参数1为文件名， 参数二为文件模式
++        //默认模式为0，即MODE_PRIVATE,有对应文件则读取，无则创建
++        SharedPreferences sp = getSharedPreferences(SPFILE_NAME, 0);
++        //读取sp中的对应boolean数据
++        boolean temp = sp.getBoolean(BOOL_NAME, false);
++        //设置到UI中去展示
++        tv_spvalue.setText(temp + "");
++    }
++
++
++    @Override
++    public void onClick(View v) {
++
++        switch (v.getId()) {
++            case R.id.bt_writeSp://Wirte a true value
++                writeSPValue();
++                break;
++
++        }
++    }
++
++    /**
++     * 创建数据库
++     */
++    private void createDatabase() {
++
++        //通过帮助类实例化一个可写入的数据库对象
++        SQLiteDatabase db = mHelper.getWritableDatabase();
++        //准备好待写入的值
++        ContentValues contentValues = new ContentValues();
++        contentValues.put(TypeEntry.COLUMMNS_NAME_TYPE, "本地电话");
++        contentValues.put(TypeEntry.COLUMMNS_NAME_SUBTABLE, "localservice");
++        //向数据库中插入值
++        db.insert(TypeEntry.TABLE_NAME,//表名
++                null,//当插入空行或者contentvalues为空时替代的空数据内容
++                contentValues);//插入的值
++        //更新数据库
++        updateDatabase();
++        //读取数据库中的内容
++        readDatabase();
++        //删除数据库中的数据
++        deleteDatabase();
++    }
++
++    /**
++     * 从数据库中读取数据
++     */
++    private void readDatabase() {
++        //根据自定义的帮助类获取读取数据库的database对象
++        SQLiteDatabase db = mHelper.getReadableDatabase();
++        //查询数据库
++        Cursor c = db.query(
++                TypeEntry.TABLE_NAME, //表名
++                new String[]{TypeEntry.COLUMMNS_NAME_TYPE},//查询的列
++                null,//相当于WHERE之后的语句
++                null,//对WHERE中占位符的补全
++                null,//相当于GROUP BY
++                null,//相当于HAVING
++                null//相当于ORDER BY
++        );
++        //将游标移动到第一行
++        c.moveToFirst();
++        //创建一个保存数据的临时字符
++        String temp = "";
++        //利用游标遍历查询到的列
++        do {
++            //拼接指定下标查询到的字符串
++            temp += c.getString(
++                    //返回当前行指定列的下标
++                    c.getColumnIndexOrThrow(TypeEntry.COLUMMNS_NAME_TYPE)
++            )
++                    + "\n";
++        } while (c.moveToNext());
++        //显示在UI上
++        tv_database.setText(temp);
++    }
++
++    /**
++     * 从数据库中删除数据
++     */
++    private void deleteDatabase() {
++        //根据帮助类获取可写的database对象
++        SQLiteDatabase db = mHelper.getWritableDatabase();
++        //从数据库中删除第三行
++        db.delete(TypeEntry.TABLE_NAME, //TABLE NAME
++                TypeEntry._ID + "=3", //SELECTION
++                null);//Selection args
++    }
++
++
++
++    /**
++     * 更新数据库中的数据
++     */
++    private void updateDatabase(){
++        //根据帮助类获取可写的database对象
++        SQLiteDatabase db = mHelper.getWritableDatabase();
++        //准备更新入表内的值
++        ContentValues values = new ContentValues();
++        values.put(TypeEntry.COLUMMNS_NAME_TYPE, "公共服务");
++        //更新数据中_id为4的行中的数据
++        db.update(TypeEntry.TABLE_NAME,//表名11
++                values,//放入的值
++                TypeEntry._ID + "=1 or " + TypeEntry._ID + "=2",//where
++                null//where args
++        );
++    }
++
++
++
++
++    /**
++     * @description 申请运行时权限
++     */
++    private void requestPermission(){
++        //检查是否拥有外部存储器写权限
++        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
++                != PackageManager.PERMISSION_GRANTED){
++            //申请WRITE_EXTERNAL_STORAGE权限
++            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_EXTERNAL_STORAGE);
++
++        }
++    }
++
++    @Override
++    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
++        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
++
++        //判断申请码
++        switch (requestCode) {
++            case WRITE_EXTERNAL_STORAGE:
++                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
++                    //申请的第一个权限成功后
++
++                } else {
++                    //申请的第一个权限失败后
++                    finish();
++                }
++
++                break;
++        }
++    }
++}
+Index: app/src/main/res/anim/rightin.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/anim/rightin.xml	(revision )
++++ app/src/main/res/anim/rightin.xml	(revision )
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="utf-8"?>
++<set xmlns:android="http://schemas.android.com/apk/res/android">
++
++    <translate
++        android:duration="500"
++        android:fromXDelta="100%"
++        android:fromYDelta="0"
++        android:toXDelta="0"
++        android:toYDelta="0" />
++
++    <alpha
++        android:duration="500"
++        android:fromAlpha="0"
++        android:toAlpha="1" />
++</set>
+\ No newline at end of file
+Index: mycontacts/src/main/res/raw/phone.db
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/raw/phone.db	(revision )
++++ mycontacts/src/main/res/raw/phone.db	(revision )
+@@ -0,0 +1,3 @@
++SQLite format 3   @                                                                     -��
++   � �                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       i�!tablePhoneTypePhoneTypeCREATE TABLE PhoneType (_id INTEGER PRIMARY KEY, type TEXT, subtable TEXT)
++   	 ����}eO4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               	 %品牌售后AfterSale %保险服务Insurance %银行证券Bank %机票酒店Travel %!快递服务Expressage 运营商Operator %'公共服务PublicService %订餐电话Catering %本地电话Local
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_drawable_anim.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_drawable_anim.xml	(revision )
++++ app/src/main/res/layout/activity_drawable_anim.xml	(revision )
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:paddingBottom="@dimen/activity_vertical_margin"
++    android:paddingLeft="@dimen/activity_horizontal_margin"
++    android:paddingRight="@dimen/activity_horizontal_margin"
++    android:paddingTop="@dimen/activity_vertical_margin"
++    tools:context="feicui.com.hk.drawableanim.DrawableAnim">
++
++
++    <ImageView
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:id="@+id/iv_fish_XML"
++        android:layout_alignParentTop="true"
++        android:layout_centerHorizontal="true"
++        android:layout_marginTop="50dp" />
++
++    <ImageView
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:id="@+id/iv_fish_code"
++        android:layout_alignParentBottom="true"
++        android:layout_centerHorizontal="true"
++        android:layout_marginBottom="100dp" />
++</RelativeLayout>
+Index: app/src/main/res/layout/activity_internal_storage.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_internal_storage.xml	(revision )
++++ app/src/main/res/layout/activity_internal_storage.xml	(revision )
+@@ -0,0 +1,29 @@
++<?xml version="1.0" encoding="utf-8"?>
++    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++        xmlns:tools="http://schemas.android.com/tools"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:id="@+id/activity_internal_storage"
++        android:paddingBottom="@dimen/activity_vertical_margin"
++        android:paddingLeft="@dimen/activity_horizontal_margin"
++        android:paddingRight="@dimen/activity_horizontal_margin"
++        android:paddingTop="@dimen/activity_vertical_margin"
++        tools:context="feicui.com.hk.datastorage.InternalStorage">
++        <TextView
++            android:text="Default raw file"
++            android:layout_below="@+id/tv_internalFile"
++            android:id="@+id/tv_rawFile"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:textSize="30dp" />
++
++        <TextView
++            android:text="Default internal file"
++            android:id="@+id/tv_internalFile"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:textSize="30dp"
++            android:layout_alignParentTop="true"
++            android:layout_alignParentStart="true"
++            android:layout_alignParentLeft="true" />
++    </RelativeLayout>
+Index: app/src/main/java/feicui/com/hk/datastorage/ExternalStorage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/datastorage/ExternalStorage.java	(revision )
++++ app/src/main/java/feicui/com/hk/datastorage/ExternalStorage.java	(revision )
+@@ -0,0 +1,168 @@
++package feicui.com.hk.datastorage;
++
++import android.os.Environment;
++import android.view.View;
++import android.widget.Button;
++import android.widget.Toast;
++
++import java.io.File;
++
++import feicui.com.app.R;
++import feicui.com.hk.BaseActivity;
++
++/**
++ *
++ * @description 外部存储器demo类
++ */
++public class ExternalStorage extends BaseActivity implements View.OnClickListener {
++    //创建公共外部存储器相册目录按钮
++    Button bt_mkAlbum;
++    //创建私有外部存储器手机硬盘目录按钮
++    Button bt_mkPrivate;
++    //创建私有外部存储器SD卡目录按钮
++    Button bt_mkPrivatePhone;
++
++    //自定义相册文件文件名
++    private static final String ALBUM_NAME = "MyAlbum";
++    //自定义外部存储器私有文件文件名
++    private static final String PRIVATE_FILE = "MyPrivateFile";
++
++    //自定义外部存储器手机硬盘私有文件文件名
++    private static final String PRIVATE_FILE_PHONE = "MyPrivateFilePhone";
++
++    @Override
++    protected int setContent() {
++        return R.layout.activity_external_storage;
++    }
++
++    @Override
++    protected void initView() {
++        bt_mkAlbum = (Button) findViewById(R.id.bt_mkAlbum);
++        bt_mkPrivate = (Button) findViewById(R.id.bt_mkPrivate);
++        bt_mkPrivatePhone = (Button) findViewById(R.id.bt_mkPrivatePhone);
++    }
++
++    @Override
++    protected void setListener() {
++        bt_mkAlbum.setOnClickListener(this);
++        bt_mkPrivate.setOnClickListener(this);
++        bt_mkPrivatePhone.setOnClickListener(this);
++    }
++
++
++    /**
++     * 检查设备可读状态
++     */
++    private boolean checkReadState() {
++        //获得设备当前状态
++        String state = Environment.getExternalStorageState();
++        //判断是否可读
++        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)
++                || Environment.MEDIA_MOUNTED.equals(state)) {
++            return true;
++        }
++        return false;
++    }
++
++    /**
++     * 检查设备可写状态
++     */
++    private boolean checkWriteState() {
++        //获得设备当前状态
++        String state = Environment.getExternalStorageState();
++        //判断是否可读
++        if (Environment.MEDIA_MOUNTED.equals(state)) {
++            return true;
++        }
++        return false;
++    }
++
++    /**
++     * @param fileName
++     * @description 创建一个相册目录下的文件
++     */
++
++    private void createAlbum(String fileName) {
++        //检查设备可写状态
++        if (checkWriteState()) {
++            //根据相册目录创建一个File对象
++            File file = new File(
++                    Environment.getExternalStoragePublicDirectory
++                            (Environment.DIRECTORY_PICTURES),
++                    fileName);
++            //创建一个多级目录，返回成功或者失败的布尔值
++            if (!file.mkdirs()) {
++                //若失败，提示
++                Toast.makeText(
++                        this,
++                        "Create directory failed!",
++                        Toast.LENGTH_SHORT)
++                        .show();
++            }
++        }
++    }
++
++    /**
++     * @param fileName 目录或文件名
++     * @description 创建一个私有外部存储器目录(一般只在手机硬盘中)
++     */
++
++    private void createPrivate(String fileName) {
++        //检查设备可写状态
++        if (checkWriteState()) {
++            //根据相册目录创建一个File对象
++            File file = new File(
++                    getExternalFilesDir(null),
++                    fileName);
++            //创建一个多级目录，返回成功或者失败的布尔值
++            if (!file.exists() && !file.mkdirs()) {
++                //若失败，提示
++                Toast.makeText(
++                        this,
++                        "Create directory failed!",
++                        Toast.LENGTH_SHORT)
++                        .show();
++            }
++        }
++    }
++
++    /**
++     * @param fileName 目录或文件名
++     * @description 创建一个私有外部存储器目录(手机硬盘中)
++     */
++
++    private void createPrivatePhone (String fileName) {
++        //检查设备可写状态
++        if (checkWriteState()) {
++            //根据相册目录创建一个File对象
++            File file = new File(
++                    getExternalFilesDirs(null)[0],//0为一般手机硬盘，1一般为SD卡，这里可能会根据设备类型产生差异
++                    fileName);
++            //创建一个多级目录，返回成功或者失败的布尔值
++            if (!file.exists() && !file.mkdirs()) {
++                //若失败，提示
++                Toast.makeText(
++                        this,
++                        "Create directory failed!",
++                        Toast.LENGTH_SHORT)
++                        .show();
++            }
++        }
++    }
++
++    @Override
++    public void onClick(View v) {
++        switch (v.getId()) {
++            case R.id.bt_mkAlbum://创建公有相册目录
++                createAlbum(ALBUM_NAME);
++                break;
++            case R.id.bt_mkPrivate://创建私有外部存储器目录（手机硬盘和SD卡中）
++                createPrivate(PRIVATE_FILE);
++                break;
++            case R.id.bt_mkPrivatePhone://创建私有外部存储器目录（手机SD卡）
++                createPrivatePhone(PRIVATE_FILE_PHONE);
++                break;
++        }
++    }
++}
++
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .gitignore	(revision )
++++ .gitignore	(revision )
+@@ -0,0 +1,8 @@
++*.iml
++.gradle
++/local.properties
++/.idea/workspace.xml
++/.idea/libraries
++.DS_Store
++/build
++/captures
+Index: settings.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- settings.gradle	(revision )
++++ settings.gradle	(revision )
+@@ -0,0 +1,1 @@
++include ':mycontacts', ':app'
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision )
++++ .idea/modules.xml	(revision )
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
++      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
++      <module fileurl="file://$PROJECT_DIR$/mycontacts/mycontacts.iml" filepath="$PROJECT_DIR$/mycontacts/mycontacts.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/java/feicui/com/hk/datastorage/InternalStorage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/datastorage/InternalStorage.java	(revision )
++++ app/src/main/java/feicui/com/hk/datastorage/InternalStorage.java	(revision )
+@@ -0,0 +1,104 @@
++package feicui.com.hk.datastorage;
++
++import android.widget.TextView;
++
++import java.io.FileInputStream;
++import java.io.FileOutputStream;
++import java.io.InputStream;
++
++import feicui.com.app.R;
++import feicui.com.hk.BaseActivity;
++
++public class InternalStorage extends BaseActivity {
++
++    //运行期的内部存储器文件数据
++    TextView tv_internalFile;
++    //编译期的内部存储器文件数据
++    TextView tv_rawFile;
++    //运行期内部存储器文件文件名
++    String FILE_NAME = "internal file";
++    //运行期内部存储器文件数据
++    String FILE_DATA = "Hello Internal file!";
++
++    @Override
++    protected int setContent() {
++        return R.layout.activity_internal_storage;
++    }
++
++    @Override
++    protected void initView() {
++        tv_internalFile = (TextView) findViewById(R.id.tv_internalFile);
++        tv_rawFile = (TextView) findViewById(R.id.tv_rawFile);
++
++        writeFile(FILE_NAME);//创建internal file文件
++        readFile(FILE_NAME);//读取internal file文件
++    }
++
++    @Override
++    protected void setListener() {
++
++    }
++
++    /**
++     * @param fileName 写入文件的文件名
++     * @description 向内部存储器中写入文件
++     */
++    private void writeFile(String fileName) {
++        try {
++            //创建或者替换一个文件，第一个参数为文件名，第二个参数为文件模式
++            FileOutputStream fop = openFileOutput(fileName, MODE_PRIVATE);
++            //向文件中写入数据
++            fop.write(FILE_DATA.getBytes("UTF-8"));
++            //关闭数据流
++            fop.close();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++
++    }
++
++    /**
++     * @param fileName 读取文件的文件名
++     * @description 读取内部存储器中的文件
++     */
++    private void readFile(String fileName) {
++        //运行期文件
++        try {
++            //创建读取文件的输入流
++            FileInputStream fip = openFileInput(fileName);
++            //创建保存数据的临时字符
++            String temp = "";
++            //创建缓冲区
++            byte[] buffer = new byte[1024];
++            //向缓冲区中循环读入数据，直至数据读完（读到-1时）
++            while (fip.read(buffer) != -1) {
++                //通过byte数组来拼接字符数据
++                temp += new String(buffer);
++            }
++            //关闭数据流
++            fip.close();
++            //更新在UI上
++            tv_internalFile.setText(temp);
++
++            //编译期文件
++            //创建读取raw文件下文件的输入流
++            InputStream ip = getResources().openRawResource(R.raw.rawfile);
++            //创建保存数据的临时字符
++            temp = "";
++            //创建缓冲区
++            buffer = new byte[1024];
++            //向缓冲区中循环读入数据，直至数据读完（读到-1时）
++            while (ip.read(buffer) != -1) {
++                //通过byte数组来拼接字符数据
++                temp += new String(buffer);
++            }
++            //关闭数据流
++            ip.close();
++            //更新在UI上
++            tv_rawFile.setText(temp);
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++
++    }
++}
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/compiler.xml	(revision )
++++ .idea/compiler.xml	(revision )
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <resourceExtensions />
++    <wildcardResourcePatterns>
++      <entry name="!?*.java" />
++      <entry name="!?*.form" />
++      <entry name="!?*.class" />
++      <entry name="!?*.groovy" />
++      <entry name="!?*.scala" />
++      <entry name="!?*.flex" />
++      <entry name="!?*.kt" />
++      <entry name="!?*.clj" />
++      <entry name="!?*.aj" />
++    </wildcardResourcePatterns>
++    <annotationProcessing>
++      <profile default="true" name="Default" enabled="false">
++        <processorPath useClasspath="true" />
++      </profile>
++    </annotationProcessing>
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/res/animator/bouncer.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/animator/bouncer.xml	(revision )
++++ app/src/main/res/animator/bouncer.xml	(revision )
+@@ -0,0 +1,27 @@
++<?xml version="1.0" encoding="utf-8"?>
++<set xmlns:android="http://schemas.android.com/apk/res/android"
++    android:ordering="sequentially">
++    <objectAnimator
++        android:duration="500"
++        android:propertyName="x"
++        android:valueFrom="0f"
++        android:valueTo="400f"
++        android:valueType="floatType"
++        android:interpolator="@android:anim/decelerate_interpolator"/>
++    <set android:ordering="together">
++
++        <objectAnimator
++            android:duration="500"
++            android:propertyName="y"
++            android:valueFrom="0f"
++            android:valueTo="500f"
++            android:valueType="floatType" />
++        <objectAnimator
++            android:duration="500"
++            android:propertyName="alpha"
++            android:valueFrom="1f"
++            android:valueTo="0f"
++            android:valueType="floatType" />
++    </set>
++
++</set>
+\ No newline at end of file
+Index: app/src/main/res/drawable/fishanim.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/drawable/fishanim.xml	(revision )
++++ app/src/main/res/drawable/fishanim.xml	(revision )
+@@ -0,0 +1,54 @@
++<?xml version="1.0" encoding="utf-8"?>
++<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
++    android:oneshot="false">
++    <item
++        android:drawable="@drawable/fish_01"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_02"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_03"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_04"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_05"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_06"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_07"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_08"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_09"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_10"
++        android:duration="100" />
++
++    <item
++        android:drawable="@drawable/fish_11"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_12"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_13"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_14"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_15"
++        android:duration="100" />
++    <item
++        android:drawable="@drawable/fish_16"
++        android:duration="100" />
++
++</animation-list>
+Index: mycontacts/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/values/strings.xml	(revision )
++++ mycontacts/src/main/res/values/strings.xml	(revision )
+@@ -0,0 +1,4 @@
++<resources>
++    <string name="app_name">MyContacts</string>
++    <string name="tv_main_title">一站式号码服务平台</string>
++</resources>
+Index: app/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/.gitignore	(revision )
++++ app/.gitignore	(revision )
+@@ -0,0 +1,1 @@
++/build
+Index: mycontacts/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/.gitignore	(revision )
++++ mycontacts/.gitignore	(revision )
+@@ -0,0 +1,1 @@
++/build
+Index: mycontacts/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/layout/activity_main.xml	(revision )
++++ mycontacts/src/main/res/layout/activity_main.xml	(revision )
+@@ -0,0 +1,38 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    android:id="@+id/ll_context"
++    tools:context="com.example.hk.mycontacts.MainActivity">
++
++
++
++        <TextView
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="1"
++            android:text="@string/tv_main_title"
++            android:background="#0AA7F0"
++            android:textSize="22sp"
++            android:gravity="center"
++            android:textColor="#ffffff"
++            android:id="@+id/tv_main_title" />
++
++
++
++
++        <ListView
++
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="4"
++            android:id="@+id/lv_main" />
++
++
++
++
++
++
++</LinearLayout>
+Index: mycontacts/src/main/java/com/example/hk/mycontacts/WelcomeActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/java/com/example/hk/mycontacts/WelcomeActivity.java	(revision )
++++ mycontacts/src/main/java/com/example/hk/mycontacts/WelcomeActivity.java	(revision )
+@@ -0,0 +1,73 @@
++package com.example.hk.mycontacts;
++
++
++import android.app.Activity;
++import android.content.Intent;
++import android.os.Bundle;
++import android.view.Window;
++import android.view.animation.AccelerateInterpolator;
++import android.view.animation.AlphaAnimation;
++import android.view.animation.Animation;
++import android.widget.RelativeLayout;
++
++public class WelcomeActivity extends Activity {
++
++
++    //XML加载动画的TextView
++
++    RelativeLayout rl_context;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
++       // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
++        setContentView(R.layout.activity_welcome);
++
++        initView();//加载控件
++        initAnim();//加载动画
++
++    }
++
++
++    private void initView() {
++
++        rl_context=(RelativeLayout) findViewById(R.id.rl_context);
++    }
++
++    private void initAnim() {
++        //创建透明度动画
++        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
++        //设置透明的持续时间
++        alphaAnimation.setDuration(4000);
++        //设置透明的插值器(加速)
++        alphaAnimation.setInterpolator(new AccelerateInterpolator());
++        //设置动画播放延迟
++        alphaAnimation.setStartOffset(500);
++
++
++        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
++            @Override
++            public void onAnimationStart(Animation animation) {
++
++            }
++
++            @Override
++            public void onAnimationEnd(Animation animation) {
++                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
++                startActivity(intent);
++                finish();
++            }
++
++            @Override
++            public void onAnimationRepeat(Animation animation) {
++
++            }
++        });
++        //启动动画
++        rl_context.startAnimation(alphaAnimation);
++
++
++    }
++
++}
+\ No newline at end of file
+Index: mycontacts/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/values/colors.xml	(revision )
++++ mycontacts/src/main/res/values/colors.xml	(revision )
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <color name="colorPrimary">#3F51B5</color>
++    <color name="colorPrimaryDark">#303F9F</color>
++    <color name="colorAccent">#FF4081</color>
++</resources>
+Index: app/src/main/java/feicui/com/hk/datastorage/ContentProviderActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/feicui/com/hk/datastorage/ContentProviderActivity.java	(revision )
++++ app/src/main/java/feicui/com/hk/datastorage/ContentProviderActivity.java	(revision )
+@@ -0,0 +1,338 @@
++package feicui.com.hk.datastorage;
++
++import android.content.ContentProviderOperation;
++import android.content.ContentProviderResult;
++import android.content.ContentUris;
++import android.content.ContentValues;
++import android.content.OperationApplicationException;
++import android.database.Cursor;
++import android.net.Uri;
++import android.os.RemoteException;
++import android.provider.ContactsContract;
++import android.provider.MediaStore;
++import android.text.TextUtils;
++import android.view.View;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.ListView;
++import android.widget.SimpleCursorAdapter;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import java.util.ArrayList;
++
++import feicui.com.app.R;
++import feicui.com.hk.BaseActivity;
++
++/**
++ * @author 2016-09-07
++ * @description 内容提供者功能演示demo类
++ */
++
++public class ContentProviderActivity extends BaseActivity {
++
++    //用来显示获取的数据内容
++    TextView tv_data;
++    //用户输入的编辑文本框
++    EditText et_search;
++    //查找的按钮
++    Button bt_search;
++    //显示查询数据的列表
++    ListView lv_cursor;
++    //简易游标适配器
++    SimpleCursorAdapter mSimpleCursorAdapter;
++
++    @Override
++    protected int setContent() {
++        return R.layout.activity_content_provider;
++    }
++
++    @Override
++    protected void initView() {
++        tv_data = (TextView) findViewById(R.id.tv_data);
++        et_search = (EditText) findViewById(R.id.et_search);
++        bt_search = (Button) findViewById(R.id.bt_search);
++        lv_cursor = (ListView) findViewById(R.id.lv_cursor);
++        //queryImage();
++        //querySingleImage();
++
++        //插入一张图片
++        //insertNewImage();
++        //更新图片信息
++        //updateImage();
++        //删除图片
++        //deleteImages();
++
++        //批量操作通讯录数据
++        batchOperateContacts();
++    }
++
++    /**
++     * @param view 点击的视图
++     * @description 使用ContentProvider的方式查询手机中的图片信息
++     */
++    public void queryImage(View view) {
++
++        //查询条件语句
++        String mSlectionClause;
++        //查询条件的参数
++        String[] mSlectionArgs = {""};
++        //用户输入的查询关键词
++        String mSearch;
++        //构造查询的投影
++        String[] mProjection = new String[]{
++                MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME//图片显示的名字
++        };
++
++
++        //如若查询条件(WHERE)为空,则返回所有的列
++        if (TextUtils.isEmpty(mSearch = et_search.getText().toString())) {
++            //构造查询条件语句
++            mSlectionClause = null;
++            //构造查询条件的参数
++            mSlectionArgs = null;
++        } else {
++            //构造查询条件语句
++            mSlectionClause = MediaStore.Images.Media._ID + " = ?";
++            //构造查询条件的参数
++            mSlectionArgs[0] = mSearch;
++        }
++
++        //查询指定uri的ContentProvider，返回一个游标
++        Cursor mCursor = getContentResolver().query(
++                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,//用来查询公共图片的uri（相当于一个表名）
++                mProjection, //相当于COLUMNS,这里null指的是返回整张表，使用"*"可能会报错
++                mSlectionClause,//相当于WHERE
++                mSlectionArgs,//相当于WHERE ARGS
++                null
++        );
++
++        //如若游标没有正确实例化
++        if (mCursor == null) {
++
++        }
++        //如若查询不到任何行
++        else if (mCursor.getCount() < 1) {
++            //弹出一个吐司
++            Toast.makeText(this, "没有匹配的数据,请重新输入!", Toast.LENGTH_LONG).show();
++        }
++        //如果正确返回了数据
++        else {
++            //确定需要的数据的下标，减少IndexOrThrow的调用，提高效率
++            int idIndex = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
++            int displayIndex = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
++            //游标移动到第一行，否则游标的位置会在-1停留
++            mCursor.moveToFirst();
++            //用来存储临时拼接数据的字符串
++            String temp = "";
++            do {
++                String id = mCursor.getString(idIndex);
++                String display = mCursor.getString(displayIndex);
++                temp += "id = " + id + "\n" + "display = " + display + "\n\n";
++            } while (mCursor.moveToNext());
++
++            //构建简易适配器展示数据控件列表
++            int[] mImageListItems = new int[]{R.id.tv_id,
++                    R.id.tv_display};
++            //初始化简易游标适配器
++            mSimpleCursorAdapter = new SimpleCursorAdapter(this, R.layout.item_cursor, mCursor, mProjection, mImageListItems, 0);
++            //上下文  子item布局 保存查询结果的游标  查询的列 展示查询列每行内容的控件组
++            //关闭游标
++            // mCursor.close();
++            //设置UI
++            // tv_data.setText(temp);
++            lv_cursor.setAdapter(mSimpleCursorAdapter);
++
++        }
++    }
++
++    @Override
++    protected void setListener() {
++
++    }
++
++
++    /**
++     * @description 使用ContentProvider的方式查询单张图片信息
++     */
++    private void querySingleImage() {
++        //指定查询某一行的uri
++        Uri singleUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, 21);
++
++        //查询指定uri的ContentProvider，返回一个游标
++        Cursor mCursor = getContentResolver().query(
++                singleUri,//用来查询公共图片的uri（相当于一个表名）
++                null, //相当于COLUMNS,这里null指的是返回整张表，使用"*"可能会报错
++                null,//相当于WHERE
++                null,//相当于WHERE ARGS
++                null
++        );
++
++        //判断游标状态,不为空且有数据时开始遍历
++        if (mCursor != null && mCursor.getCount() > 0) {
++            //确定需要的数据的下标，减少IndexOrThrow的调用，提高效率
++            int idIndex = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
++            int heightIndex = mCursor.getColumnIndexOrThrow(MediaStore.Images.Media.HEIGHT);
++            //游标移动到第一行，否则游标的位置会在-1停留
++            mCursor.moveToFirst();
++            //用来存储临时拼接数据的字符串
++            String temp = "";
++            do {
++                String id = mCursor.getString(idIndex);
++                String height = mCursor.getString(heightIndex);
++                temp += "id = " + id + "\n" + "height = " + height + "\n\n";
++            } while (mCursor.moveToNext());
++            //关闭游标
++            mCursor.close();
++            //设置UI
++            tv_data.setText(temp);
++        }
++    }
++
++
++    /**
++     * @description插入一条新数据(一张新图)
++     */
++
++    private void insertNewImage() {
++        //用来保存插入数据返回的uri
++        Uri mNewUri = null;
++        //准备一条待插入的数据
++        ContentValues mContentValues = new ContentValues();
++        //设置插入数据的内容
++        mContentValues.put(MediaStore.Images.Media.TITLE, "photo1");
++        mContentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "photo");
++        mContentValues.put(MediaStore.Images.Media.HEIGHT, "200");
++        //插入数据返回一条当前数据的uri
++        mNewUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,////插入的uri
++                mContentValues //插入的数据
++        );
++        //返回该条uri的_ID值
++        tv_data.setText(ContentUris.parseId(mNewUri) + "");
++
++    }
++
++    /**
++     * @description 更新相册中某张图片的信息
++     */
++    private void updateImage() {
++        //构建选择语句
++        String mSelectionClause = MediaStore.Images.Media.DISPLAY_NAME + " like ? ";
++        //构建选择语句条件
++        String[] mSelectionArgs = {"147%"};//待更新的值
++        ContentValues mContentValues = new ContentValues();
++        //设置更新的值内容
++        mContentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "photo166");
++        //更新数据
++        getContentResolver().update(
++                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, //需要更新的uri
++                mContentValues, //需要更新的值
++                mSelectionClause, //选择语句
++                mSelectionArgs //选择语句参数
++        );
++    }
++
++    /**
++     * @descrption 删除相册中的某些图片
++     */
++    private void deleteImages() {
++        //删除的行
++        int mRowsDeleted = 0;
++        //构建删除的条件
++
++        String mSelectionClause = MediaStore.Images.Media.DISPLAY_NAME + " like ? "
++                + " or " + MediaStore.Images.Media.TITLE + " like ? " + " or " +
++                MediaStore.Images.Media.TITLE + " like ? ";
++        //构建删除条件的参数
++        String[] mSelectionArgs = {"photo%", "147%"};
++        //执行删除,返回删除的行数
++        mRowsDeleted = getContentResolver().delete(
++                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, //需要删除的内容的表对应的uri
++                mSelectionClause, //删除条件
++                mSelectionArgs //删除条件参数
++        );
++        //更新UI
++        tv_data.setText(mRowsDeleted + "");
++
++
++    }
++
++
++    /**
++     * @description 批量操作通讯录数据
++     */
++    private void batchOperateContacts() {
++
++        //定义一个存储了批量操作的集合
++        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
++
++        //添加一个插入新通讯录数据的操作
++        ops.add(
++                ContentProviderOperation
++                        .newInsert(ContactsContract.RawContacts.CONTENT_URI)
++                        .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
++                        .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
++                        .build()
++        );
++
++
++        //构建选择语句
++        String mSelectionClause = ContactsContract.RawContacts._ID + "=8";
++
++        //添加一个删除某一条通讯录数据的操作
++        ops.add(
++                ContentProviderOperation
++                        .newDelete(ContactsContract.RawContacts.CONTENT_URI)
++                        .withSelection(mSelectionClause, null)
++                        .build()
++        );
++
++        //添加一个通讯录断点查询的操作
++        ops.add(
++                ContentProviderOperation
++                        .newAssertQuery(ContactsContract.RawContacts.CONTENT_URI)
++                        .withSelection(mSelectionClause, null)
++                        .withExpectedCount(0)
++                        .build()
++        );
++
++        //通过之前下下标为0的的ContentProviderOperation返回的
++        // Uri中的ContactsContract.Data.RAW_CONTACT_ID作为
++        // 选择条件插入数据
++        //data表与raw_contacts是关联的关系
++        ops.add(
++                ContentProviderOperation
++                        //要插入数据的uri
++                        .newInsert(ContactsContract.Data.CONTENT_URI)
++
++                         //根据批处理的第一次操作所返回的ContactsContract.Data.CONTACT_ID来进行插入数据操作
++                        .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
++                        //DATA1代表了电话号码,给该联系人插入一条电话数据
++                        .withValue(ContactsContract.Data.DATA1, "123456789")
++                        //在给Data表插入数据时必须制定该条数据的MIME类型
++                        .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
++                        .build()
++        );
++
++
++
++        try {
++            //保存批处理的操作结果
++            ContentProviderResult[] results =
++                    //执行批处理操作
++                    getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
++            //保存操作结果的临时变量
++            String temp = "";
++            //遍历结果
++            for (int i = 0; i < results.length; i++) {
++                temp += results[i].toString() + "\n\n";
++            }
++            //更新UI
++            tv_data.setText(temp);
++        } catch (RemoteException e) {
++            e.printStackTrace();
++        } catch (OperationApplicationException e) {
++            e.printStackTrace();
++        }
++    }
++}
+Index: app/src/main/res/layout/activity_cache_file.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_cache_file.xml	(revision )
++++ app/src/main/res/layout/activity_cache_file.xml	(revision )
+@@ -0,0 +1,23 @@
++<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
++        xmlns:tools="http://schemas.android.com/tools"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++            xmlns:tools="http://schemas.android.com/tools"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:paddingBottom="@dimen/activity_vertical_margin"
++            android:paddingLeft="@dimen/activity_horizontal_margin"
++            android:paddingRight="@dimen/activity_horizontal_margin"
++            android:paddingTop="@dimen/activity_vertical_margin"
++            tools:context="feicui.com.hk.datastorage.CacheFile">
++
++            <TextView
++                android:textSize="30dp"
++                android:id="@+id/tv_cacheData"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="default cache data" />
++
++        </RelativeLayout>
++    </ScrollView>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_external_storage.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_external_storage.xml	(revision )
++++ app/src/main/res/layout/activity_external_storage.xml	(revision )
+@@ -0,0 +1,33 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:paddingBottom="@dimen/activity_vertical_margin"
++    android:paddingLeft="@dimen/activity_horizontal_margin"
++    android:paddingRight="@dimen/activity_horizontal_margin"
++    android:paddingTop="@dimen/activity_vertical_margin"
++    android:orientation="vertical"
++    tools:context="feicui.com.hk.datastorage.ExternalStorage">
++
++
++    <Button
++        android:id="@+id/bt_mkAlbum"
++        android:text="Make Album Directory"
++        android:textAllCaps="false"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content" />
++    <Button
++        android:id="@+id/bt_mkPrivate"
++        android:text="Make Private Directory"
++        android:textAllCaps="false"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content" />
++
++    <Button
++        android:id="@+id/bt_mkPrivatePhone"
++        android:text="Make Private phone Directory"
++        android:textAllCaps="false"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content" />
++</LinearLayout>
+Index: .idea/copyright/profiles_settings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/copyright/profiles_settings.xml	(revision )
++++ .idea/copyright/profiles_settings.xml	(revision )
+@@ -0,0 +1,3 @@
++<component name="CopyrightManager">
++  <settings default="" />
++</component>
+\ No newline at end of file
+Index: mycontacts/src/main/res/values-w820dp/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- mycontacts/src/main/res/values-w820dp/dimens.xml	(revision )
++++ mycontacts/src/main/res/values-w820dp/dimens.xml	(revision )
+@@ -0,0 +1,6 @@
++<resources>
++    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
++         (such as screen margins) for screens with more than 820dp of available width. This
++         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
++    <dimen name="activity_horizontal_margin">64dp</dimen>
++</resources>
+Index: app/proguard-rules.pro
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/proguard-rules.pro	(revision )
++++ app/proguard-rules.pro	(revision )
+@@ -0,0 +1,17 @@
++# Add project specific ProGuard rules here.
++# By default, the flags in this file are appended to flags specified
++# in D:\Android\sdk/tools/proguard/proguard-android.txt
++# You can edit the include path and order by changing the proguardFiles
++# directive in build.gradle.
++#
++# For more details, see
++#   http://developer.android.com/guide/developing/tools/proguard.html
++
++# Add any project specific keep options here:
++
++# If your project uses WebView with JS, uncomment the following
++# and specify the fully qualified class name to the JavaScript interface
++# class:
++#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
++#   public *;
++#}
+Index: .idea/runConfigurations.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/runConfigurations.xml	(revision )
++++ .idea/runConfigurations.xml	(revision )
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RunConfigurationProducerService">
++    <option name="ignoredProducers">
++      <set>
++        <option value="org.jetbrains.plugins.gradle.execution.test.runner.AllInPackageGradleConfigurationProducer" />
++        <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestClassGradleConfigurationProducer" />
++        <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestMethodGradleConfigurationProducer" />
++      </set>
++    </option>
++  </component>
++</project>
+\ No newline at end of file

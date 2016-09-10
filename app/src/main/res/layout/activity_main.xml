@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/ll_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="feicui.com.hk.MainActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/main_bt_propertyanim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ff80ff"
+                android:text="属性动画" />
+
+            <Button
+                android:id="@+id/main_bt_viewanim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#80ff80"
+                android:text="补间动画" />
+
+            <Button
+                android:id="@+id/main_bt_dawable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#8000ff"
+                android:text="帧  动  画" />
+            <Button
+                android:id="@+id/main_bt_transition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#0500f0"
+                android:text="过渡动画" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/main_bt_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#0080ff"
+                android:text="数据存储" />
+
+            <Button
+                android:id="@+id/main_bt_datainter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#61f0f8"
+                android:text="内部存储" />
+
+            <Button
+                android:id="@+id/main_cache_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ff00f8"
+                android:text="缓存存储" />
+            <Button
+                android:id="@+id/main_external_storage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#0ff088"
+                android:text="SD卡存储" />
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/main_content_provider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#9070ff"
+            android:text="内容提供者" />
+
+</LinearLayout>
+
+    </LinearLayout>
